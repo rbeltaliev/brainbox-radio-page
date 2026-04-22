@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brainbox Radio — Медиаплатформа</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────────────── */
+    :root {
+      --color-paper-white:   #f9f8f6;
+      --color-clear-white:   #ffffff;
+      --color-night-sky:     #0f1730;
+      --color-wetty-asphalt: #3d3c38;
+      --color-dark-water:    #1a2a4f;
+      --color-mint:          #3b82f6;
+      --color-mint-light:    #dbeafe;
+      --color-elephant-bone: #e8e4dc;
+      --color-muted:         #8a8880;
+      --color-live:          #e84040;
+
+      --font-heading: 'Zen Antique Soft', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+
+      --card-shadow:   0 20px 25px 0 rgba(26,30,18,.02), 0 76px 80px 0 rgba(26,30,18,.05);
+      --big-shadow:    0 20px 25px 0 rgba(26,30,18,.08), 0 76px 80px 0 rgba(26,30,18,.10);
+      --small-shadow:  0 12px 12px 0 rgba(26,30,18,.06), 0 28px 20px 0 rgba(26,30,18,.05);
+
+      --radius-card:   20px;
+      --radius-pill:   999px;
+
+      --gap: 24px;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-paper-white);
+      color: var(--color-night-sky);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-paper-white);
+      border-bottom: 1px solid var(--color-elephant-bone);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+    }
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      color: var(--color-night-sky);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav__logo-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--color-mint);
+    }
+    .nav__links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav__links a {
+      font-size: 14px;
+      color: var(--color-muted);
+      transition: color .2s;
+    }
+    .nav__links a:hover,
+    .nav__links a.active {
+      color: var(--color-night-sky);
+    }
+    .nav__links a.active {
+      font-weight: 500;
+    }
+    .nav__cta {
+      background: var(--color-night-sky);
+      color: var(--color-clear-white);
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity .2s;
+    }
+    .nav__cta:hover { opacity: .8; }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+    .section {
+      padding: 80px 0;
+    }
+    .section__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .section__title {
+      font-family: var(--font-heading);
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .section__link {
+      font-size: 14px;
+      color: var(--color-muted);
+      border-bottom: 1px solid var(--color-muted);
+      transition: color .2s, border-color .2s;
+    }
+    .section__link:hover {
+      color: var(--color-night-sky);
+      border-color: var(--color-night-sky);
+    }
+
+    /* ─── HERO / PLAYER ─────────────────────────────────────── */
+    .hero {
+      background: var(--color-night-sky);
+      color: var(--color-paper-white);
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 48px;
+      min-height: 520px;
+      overflow: hidden;
+      align-items: center;
+    }
+    .hero__left {
+      padding: 72px 0 72px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-mint);
+      margin-bottom: 24px;
+    }
+    .hero__live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--color-live);
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+    .hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(40px, 5vw, 68px);
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .hero__subtitle {
+      font-size: 16px;
+      color: rgba(249,248,246,.55);
+      line-height: 1.5;
+      max-width: 380px;
+      margin-bottom: 48px;
+    }
+
+    /* Player controls */
+    .player {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .player__track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .player__cover {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      background: var(--color-dark-water);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .player__track-info { flex: 1; min-width: 0; }
+    .player__track-title {
+      font-size: 15px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .player__track-artist {
+      font-size: 13px;
+      color: rgba(249,248,246,.5);
+    }
+
+    .player__waveform {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 28px;
+    }
+    .player__bar {
+      width: 3px;
+      background: var(--color-mint);
+      border-radius: 2px;
+      opacity: .7;
+      transform-origin: bottom;
+    }
+    .player__bar.active {
+      animation: wave var(--d, .8s) ease-in-out infinite alternate;
+    }
+    @keyframes wave {
+      from { transform: scaleY(.25); }
+      to   { transform: scaleY(1); }
+    }
+
+    .player__controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .player__btn-play {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--color-mint);
+      color: var(--color-night-sky);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform .2s, opacity .2s;
+    }
+    .player__btn-play:hover { transform: scale(1.05); }
+    .player__btn-play svg { width: 20px; height: 20px; }
+
+    .player__btn-skip {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(249,248,246,.2);
+      color: rgba(249,248,246,.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .2s, color .2s;
+    }
+    .player__btn-skip:hover {
+      border-color: rgba(249,248,246,.6);
+      color: var(--color-paper-white);
+    }
+    .player__btn-skip svg { width: 16px; height: 16px; }
+
+    .player__volume {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .player__volume svg { width: 16px; height: 16px; color: rgba(249,248,246,.5); }
+    .player__volume-slider {
+      -webkit-appearance: none;
+      width: 80px;
+      height: 3px;
+      background: rgba(249,248,246,.2);
+      border-radius: 2px;
+      outline: none;
+    }
+    .player__volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--color-mint);
+      cursor: pointer;
+    }
+
+    /* Progress bar */
+    .player__progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .player__time {
+      font-size: 12px;
+      color: rgba(249,248,246,.4);
+      font-variant-numeric: tabular-nums;
+      min-width: 36px;
+    }
+    .player__progress-bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(249,248,246,.15);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+    .player__progress-fill {
+      height: 100%;
+      width: 35%;
+      background: linear-gradient(90deg, var(--color-mint), #b8e5b3);
+      border-radius: 2px;
+      position: relative;
+    }
+    .player__progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--color-clear-white);
+    }
+
+    /* Hero right — Video player */
+    .hero__right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 48px 0 48px 48px;
+    }
+    .hero__video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-dark-water);
+      aspect-ratio: 16 / 9;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07), var(--big-shadow);
+    }
+    .hero__video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* LIVE badge overlay */
+    .hero__video-live {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(232,64,64,.92);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+    }
+    /* Placeholder shown before stream connects */
+    .hero__video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: var(--color-dark-water);
+      transition: opacity .6s ease;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero__video-placeholder.hidden { opacity: 0; }
+    .hero__video-placeholder-icon {
+      font-size: 44px;
+      opacity: .35;
+    }
+    .hero__video-placeholder-text {
+      font-size: 13px;
+      color: rgba(249,248,246,.35);
+      letter-spacing: .03em;
+    }
+    /* Mute toggle */
+    .hero__video-mute {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      z-index: 3;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .hero__video-mute:hover { background: rgba(0,0,0,.65); }
+    .hero__video-mute svg { width: 16px; height: 16px; pointer-events: none; }
+
+    /* ─── SCHEDULE ───────────────────────────────────────────── */
+    .schedule-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .schedule-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      background: var(--color-clear-white);
+      border-radius: var(--radius-card);
+      padding: 20px 28px;
+      box-shadow: var(--card-shadow);
+      transition: transform .25s, box-shadow .25s;
+      cursor: pointer;
+    }
+    .schedule-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--small-shadow);
+    }
+    .schedule-item.active {
+      background: var(--color-night-sky);
+      color: var(--color-paper-white);
+    }
+    .schedule-item.past {
+      opacity: .5;
+    }
+    .schedule-item__time {
+      font-size: 20px;
+      font-family: var(--font-heading);
+      color: var(--color-muted);
+      line-height: 1;
+    }
+    .schedule-item.active .schedule-item__time {
+      color: var(--color-mint);
+    }
+    .schedule-item__body { min-width: 0; }
+    .schedule-item__title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .schedule-item__desc {
+      font-size: 13px;
+      color: var(--color-muted);
+    }
+    .schedule-item.active .schedule-item__desc {
+      color: rgba(249,248,246,.5);
+    }
+    .schedule-item__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .schedule-item__duration {
+      font-size: 13px;
+      color: var(--color-muted);
+    }
+    .schedule-item.active .schedule-item__duration { color: rgba(249,248,246,.5); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .badge_live {
+      background: var(--color-live);
+      color: #fff;
+    }
+    .badge_live::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    .badge_soon {
+      background: var(--color-elephant-bone);
+      color: var(--color-wetty-asphalt);
+    }
+    .badge_done {
+      background: transparent;
+      color: var(--color-muted);
+    }
+
+    /* ─── EPISODES ───────────────────────────────────────────── */
+    .episodes-filter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      color: var(--color-muted);
+      border: 1px solid var(--color-elephant-bone);
+      background: transparent;
+      transition: all .2s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--color-night-sky);
+      color: var(--color-paper-white);
+      border-color: var(--color-night-sky);
+    }
+
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+    .episode-card {
+      background: var(--color-clear-white);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform .3s ease-in-out, box-shadow .3s;
+    }
+    .episode-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--small-shadow);
+    }
+    .episode-card__thumb {
+      aspect-ratio: 16/9;
+      background: var(--color-night-sky);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .episode-card__thumb-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--color-dark-water), var(--color-night-sky));
+      opacity: .85;
+    }
+    .episode-card__thumb-pattern {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 1px;
+      opacity: .06;
+    }
+    .episode-card__thumb-pattern span {
+      background: var(--color-mint);
+      border-radius: 2px;
+    }
+    .episode-card__thumb-icon {
+      position: relative;
+      z-index: 1;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.2);
+      transition: transform .25s;
+    }
+    .episode-card:hover .episode-card__thumb-icon {
+      transform: scale(1.1);
+    }
+    .episode-card__thumb-icon svg { width: 18px; height: 18px; }
+    .episode-card__thumb-duration {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-size: 11px;
+      color: rgba(255,255,255,.8);
+      background: rgba(0,0,0,.4);
+      padding: 2px 7px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+      z-index: 1;
+    }
+    .episode-card__body {
+      padding: 20px 24px 24px;
+    }
+    .episode-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .episode-card__tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--color-mint);
+      background: var(--color-mint-light);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .episode-card__date {
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+    .episode-card__title {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .episode-card__desc {
+      font-size: 13px;
+      color: var(--color-muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .episode-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-elephant-bone);
+    }
+    .episode-card__views {
+      font-size: 12px;
+      color: var(--color-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .episode-card__views svg { width: 14px; height: 14px; }
+    .episode-card__play-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-night-sky);
+      transition: gap .2s;
+    }
+    .episode-card__play-btn:hover { gap: 10px; }
+    .episode-card__play-btn svg { width: 14px; height: 14px; }
+
+    /* ─── FEATURED EPISODE ──────────────────────────────────── */
+    .episode-featured {
+      background: var(--color-night-sky);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: var(--big-shadow);
+      margin-bottom: 40px;
+    }
+    .episode-featured__left {
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--color-paper-white);
+    }
+    .episode-featured__eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-mint);
+      margin-bottom: 16px;
+    }
+    .episode-featured__title {
+      font-family: var(--font-heading);
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .episode-featured__desc {
+      font-size: 15px;
+      color: rgba(249,248,246,.6);
+      line-height: 1.55;
+      margin-bottom: 32px;
+    }
+    .episode-featured__actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-mint);
+      color: var(--color-night-sky);
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-primary:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-primary svg { width: 16px; height: 16px; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(249,248,246,.2);
+      color: rgba(249,248,246,.8);
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(249,248,246,.6);
+      color: var(--color-paper-white);
+    }
+
+    .episode-featured__right {
+      position: relative;
+      background: linear-gradient(135deg, #1a2a4f 0%, #0f1730 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .episode-featured__art {
+      position: relative;
+      width: 220px; height: 220px;
+    }
+    .episode-featured__art-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(143,203,138,.1);
+    }
+    .episode-featured__art-ring:nth-child(1) { inset: 0; }
+    .episode-featured__art-ring:nth-child(2) { inset: 25px; border-color: rgba(143,203,138,.18); }
+    .episode-featured__art-ring:nth-child(3) { inset: 50px; border-color: rgba(143,203,138,.3); }
+    .episode-featured__art-icon {
+      position: absolute;
+      inset: 70px;
+      border-radius: 50%;
+      background: var(--color-dark-water);
+      border: 2px solid rgba(143,203,138,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .episode-featured__meta {
+      position: absolute;
+      bottom: 32px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .episode-featured__stat {
+      text-align: center;
+      color: rgba(249,248,246,.6);
+      font-size: 12px;
+    }
+    .episode-featured__stat strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-paper-white);
+      margin-bottom: 2px;
+    }
+
+    /* Dots decoration */
+    .dot-grid {
+      position: absolute;
+      top: 24px; right: 24px;
+      display: grid;
+      grid-template-columns: repeat(6, 5px);
+      gap: 5px;
+    }
+    .dot-grid span {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(143,203,138,.2);
+    }
+
+    /* ─── SUBSCRIBE BANNER ───────────────────────────────────── */
+    .subscribe-banner {
+      background: var(--color-elephant-bone);
+      border-radius: var(--radius-card);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .subscribe-banner__text h3 {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .subscribe-banner__text p {
+      font-size: 15px;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+    .subscribe-banner__platforms {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: var(--color-night-sky);
+      color: var(--color-paper-white);
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity .2s, transform .2s;
+    }
+    .platform-btn:hover { opacity: .8; transform: translateY(-1px); }
+    .platform-btn svg { width: 18px; height: 18px; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    .footer {
+      background: var(--color-night-sky);
+      color: rgba(249,248,246,.5);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    .footer__logo {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      color: var(--color-paper-white);
+    }
+    .footer__links { display: flex; gap: 24px; }
+    .footer__links a:hover { color: var(--color-paper-white); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .episodes-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav__links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 0 20px; gap: 32px; }
+      .hero__right { padding: 0 0 40px; justify-content: center; }
+      .hero__video-wrap { max-width: 100%; }
+      .container { padding: 0 20px; }
+      .section { padding: 48px 0; }
+      .episodes-grid { grid-template-columns: 1fr; }
+      .episode-featured { grid-template-columns: 1fr; }
+      .episode-featured__right { display: none; }
+      .subscribe-banner { flex-direction: column; padding: 32px; }
+      .schedule-item { grid-template-columns: 70px 1fr; }
+      .schedule-item__right { display: none; }
+      .footer { flex-direction: column; gap: 24px; padding: 32px 20px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────── -->
+<nav class="nav">
+  <a href="/" class="nav__logo">
+    <span class="nav__logo-dot"></span>
+    Brainbox
+  </a>
+  <ul class="nav__links">
+    <li><a href="#">О платформе</a></li>
+    <li><a href="#">Проекты</a></li>
+    <li><a href="#" class="active">Radio</a></li>
+    <li><a href="#">Вторичный рынок</a></li>
+    <li><a href="#">Стартапам</a></li>
+    <li><a href="#">FAQ</a></li>
+  </ul>
+  <a href="#" class="nav__cta">Войти</a>
+</nav>
+
+<!-- ─── HERO / PLAYER ─────────────────────────────── -->
+<section class="hero">
+  <div class="hero__left">
+    <div>
+      <div class="hero__badge">
+        <span class="hero__live-dot"></span>
+        В эфире сейчас
+      </div>
+      <h1 class="hero__title">Brainbox<br>Radio</h1>
+      <p class="hero__subtitle">
+        Венчурные новости, разборы стартапов и интервью с основателями — каждый будний день с 9:00 до 10:00 по Москве
+      </p>
+    </div>
+
+    <!-- Player -->
+    <div class="player">
+      <div class="player__track">
+        <div class="player__cover">📡</div>
+        <div class="player__track-info">
+          <div class="player__track-title">Утреннее шоу</div>
+          <div class="player__track-artist">Альберт Алиев · Филипп Куимов</div>
+        </div>
+        <div class="player__waveform" id="waveform"></div>
+      </div>
+      <div class="player__progress">
+        <span class="player__time">14:32</span>
+        <div class="player__progress-bar">
+          <div class="player__progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="player__time">60:00</span>
+      </div>
+      <div class="player__controls">
+        <button class="player__btn-skip" title="Назад">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h2v12H2V2zm3.5 6L14 2v12L5.5 8z"/></svg>
+        </button>
+        <button class="player__btn-play" id="play-btn" title="Воспроизвести">
+          <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="player__btn-skip" title="Вперёд">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 2h-2v12h2V2zM10.5 8L2 2v12l8.5-6z"/></svg>
+        </button>
+        <div class="player__volume">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+          <input type="range" class="player__volume-slider" value="75" min="0" max="100">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live video stream -->
+  <div class="hero__right">
+    <div class="hero__video-wrap">
+      <!-- LIVE badge -->
+      <div class="hero__video-live">
+        <span class="hero__live-dot"></span>
+        Live
+      </div>
+
+      <!-- Video element — HLS.js подключит поток -->
+      <video
+        id="live-video"
+        class="hero__video"
+        autoplay
+        muted
+        playsinline
+      ></video>
+
+      <!-- Placeholder до подключения потока -->
+      <div class="hero__video-placeholder" id="video-placeholder">
+        <div class="hero__video-placeholder-icon">📡</div>
+        <div class="hero__video-placeholder-text">Подключение к эфиру…</div>
+      </div>
+
+      <!-- Кнопка звука -->
+      <button class="hero__video-mute" id="mute-btn" title="Включить звук">
+        <!-- Иконка muted -->
+        <svg id="icon-muted" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+        </svg>
+        <!-- Иконка unmuted (скрыта) -->
+        <svg id="icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SCHEDULE ──────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Программа на сегодня</h2>
+      <a href="#" class="section__link">Архив программ</a>
+    </div>
+
+    <div class="schedule-grid">
+
+      <div class="schedule-item past">
+        <div class="schedule-item__time">08:55</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Открытие эфира</div>
+          <div class="schedule-item__desc">Заставка, анонс выпуска</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">5 мин</span>
+          <span class="badge badge_done">Завершено</span>
+        </div>
+      </div>
+
+      <div class="schedule-item active">
+        <div class="schedule-item__time">09:00</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Утреннее шоу с Альбертом и Филиппом</div>
+          <div class="schedule-item__desc">Венчурные тренды, новости недели, гость в студии</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">60 мин</span>
+          <span class="badge badge_live">Сейчас</span>
+        </div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-item__time">10:05</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Три новости дня</div>
+          <div class="schedule-item__desc">КодерЛаб, Бит за Бид, Российский Венчурный Форум</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">15 мин</span>
+          <span class="badge badge_soon">Скоро</span>
+        </div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-item__time">10:30</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Разбор стартапа</div>
+          <div class="schedule-item__desc">Детальный анализ питч-дека и бизнес-модели</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">30 мин</span>
+          <span class="badge badge_soon">Скоро</span>
+        </div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-item__time">11:00</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Интервью с основателем</div>
+          <div class="schedule-item__desc">Приглашённый гость — CEO Smartlab Татевик Пономарёва</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">45 мин</span>
+          <span class="badge badge_soon">Скоро</span>
+        </div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-item__time">12:00</div>
+        <div class="schedule-item__body">
+          <div class="schedule-item__title">Итоги дня</div>
+          <div class="schedule-item__desc">Ключевые события на рынке венчурных инвестиций</div>
+        </div>
+        <div class="schedule-item__right">
+          <span class="schedule-item__duration">20 мин</span>
+          <span class="badge badge_soon">Скоро</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── EPISODES ──────────────────────────────────── -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Выпуски канала</h2>
+      <a href="#" class="section__link">Все выпуски</a>
+    </div>
+
+    <!-- Featured -->
+    <div class="episode-featured">
+      <div class="episode-featured__left">
+        <div>
+          <div class="episode-featured__eyebrow">Последний выпуск · 14 апреля 2026</div>
+          <h3 class="episode-featured__title">Новый эмитент КодерЛаб и раунд Бит за Бид на 7 млн ₽</h3>
+          <p class="episode-featured__desc">
+            Разбираем первичное размещение акций КодерЛаб на платформе Brainbox, обсуждаем инвестиционную привлекательность и комментируем раунд музыкального сервиса Бит за Бид.
+          </p>
+          <div class="episode-featured__actions">
+            <a href="#" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              Смотреть выпуск
+            </a>
+            <a href="#" class="btn-ghost">Поделиться</a>
+          </div>
+        </div>
+        <div style="margin-top: 32px; display: flex; gap: 24px;">
+          <div style="font-size: 12px; color: rgba(249,248,246,.4);">
+            <span style="font-size: 20px; font-weight: 600; color: rgba(249,248,246,.9); display: block;">58:42</span>
+            длительность
+          </div>
+          <div style="font-size: 12px; color: rgba(249,248,246,.4);">
+            <span style="font-size: 20px; font-weight: 600; color: rgba(249,248,246,.9); display: block;">1 240</span>
+            просмотров
+          </div>
+          <div style="font-size: 12px; color: rgba(249,248,246,.4);">
+            <span style="font-size: 20px; font-weight: 600; color: rgba(249,248,246,.9); display: block;">4.9 ★</span>
+            рейтинг
+          </div>
+        </div>
+      </div>
+      <div class="episode-featured__right">
+        <div class="dot-grid">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="episode-featured__art">
+          <div class="episode-featured__art-ring"></div>
+          <div class="episode-featured__art-ring"></div>
+          <div class="episode-featured__art-ring"></div>
+          <div class="episode-featured__art-icon">📺</div>
+        </div>
+        <div class="episode-featured__meta">
+          <div class="episode-featured__stat">
+            <strong>14 апр</strong>дата
+          </div>
+          <div class="episode-featured__stat">
+            <strong>Ep. 47</strong>выпуск
+          </div>
+          <div class="episode-featured__stat">
+            <strong>HD</strong>качество
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="episodes-filter">
+      <button class="filter-btn active">Все</button>
+      <button class="filter-btn">Утреннее шоу</button>
+      <button class="filter-btn">Интервью</button>
+      <button class="filter-btn">Разборы</button>
+      <button class="filter-btn">Новости</button>
+    </div>
+
+    <!-- Grid -->
+    <div class="episodes-grid">
+
+      <!-- Card 1 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">54:18</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Интервью</span>
+            <span class="episode-card__date">11 апр 2026</span>
+          </div>
+          <div class="episode-card__title">Едем в Казань: Российский венчурный форум</div>
+          <div class="episode-card__desc">Обсуждаем программу РВФ 9–10 апреля, ключевые спикеры и что ждать от форума</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              980
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg" style="background: linear-gradient(135deg, #1a2e3d, #0d1a12)"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">42:05</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Разбор</span>
+            <span class="episode-card__date">10 апр 2026</span>
+          </div>
+          <div class="episode-card__title">Smartlab: как устроена биотех-платформа для врачей</div>
+          <div class="episode-card__desc">Татевик Пономарёва рассказывает о модели монетизации и планах на масштабирование</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              1 340
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg" style="background: linear-gradient(135deg, #2b1a3d, #1a0d25)"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">38:50</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Утреннее шоу</span>
+            <span class="episode-card__date">9 апр 2026</span>
+          </div>
+          <div class="episode-card__title">AI-стартапы получили $2 млрд за неделю — что происходит</div>
+          <div class="episode-card__desc">Обзор крупнейших раундов: Mistral, Cohere, Perplexity и почему Nvidia снова в центре внимания</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              2 180
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg" style="background: linear-gradient(135deg, #1a2e4f, #0f1730)"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">61:12</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Интервью</span>
+            <span class="episode-card__date">8 апр 2026</span>
+          </div>
+          <div class="episode-card__title">Фонд Brainbox: как устроен отбор проектов</div>
+          <div class="episode-card__desc">Критерии отбора, типичные ошибки фаундеров и что происходит после включения в портфель</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              3 410
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg" style="background: linear-gradient(135deg, #2e2a1a, #1e1812)"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">29:44</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Новости</span>
+            <span class="episode-card__date">7 апр 2026</span>
+          </div>
+          <div class="episode-card__title">Вторичный рынок Brainbox: первые сделки</div>
+          <div class="episode-card__desc">Как работает механизм перепродажи акций и кто первым воспользовался возможностью</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              876
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="episode-card">
+        <div class="episode-card__thumb">
+          <div class="episode-card__thumb-bg" style="background: linear-gradient(135deg, #1a2535, #0d1520)"></div>
+          <div class="episode-card__thumb-pattern">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="episode-card__thumb-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="episode-card__thumb-duration">47:30</span>
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">Разбор</span>
+            <span class="episode-card__date">4 апр 2026</span>
+          </div>
+          <div class="episode-card__title">Юнит-экономика стартапа: разбираем живой пример</div>
+          <div class="episode-card__desc">CAC, LTV, churn — разбираем метрики реального проекта из портфеля Brainbox</div>
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              1 650
+            </span>
+            <a href="#" class="episode-card__play-btn">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /episodes-grid -->
+  </div>
+</section>
+
+<!-- ─── SUBSCRIBE BANNER ──────────────────────────── -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="subscribe-banner">
+      <div class="subscribe-banner__text">
+        <h3>Подписывайтесь и не пропускайте эфиры</h3>
+        <p>Уведомления о новых выпусках, эксклюзивные материалы<br>и анонсы гостей — прямо в вашем подкаст-плеере</p>
+      </div>
+      <div class="subscribe-banner__platforms">
+        <a href="#" class="platform-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          YouTube
+        </a>
+        <a href="#" class="platform-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          Telegram
+        </a>
+        <a href="#" class="platform-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          Apple Podcasts
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer__logo">Brainbox</div>
+  <div class="footer__links">
+    <a href="#">О платформе</a>
+    <a href="#">Проекты</a>
+    <a href="#">Radio</a>
+    <a href="#">Контакты</a>
+  </div>
+  <div style="font-size: 13px;">© 2026 Brainbox.VC</div>
+</footer>
+
+<script>
+  /* ── Live video stream ── */
+  (function () {
+    const STREAM_URL = 'https://radio-brainbox.duckdns.org/stream/';
+    const video      = document.getElementById('live-video');
+    const placeholder = document.getElementById('video-placeholder');
+    const muteBtn    = document.getElementById('mute-btn');
+    const iconMuted  = document.getElementById('icon-muted');
+    const iconSound  = document.getElementById('icon-sound');
+
+    function onPlaying () {
+      placeholder.classList.add('hidden');
+    }
+
+    function initStream () {
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Safari — нативный HLS
+        video.src = STREAM_URL;
+        video.addEventListener('playing', onPlaying, { once: true });
+        video.play().catch(() => {});
+      } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+        // Chrome / Firefox — HLS.js
+        const hls = new Hls({ lowLatencyMode: true });
+        hls.loadSource(STREAM_URL);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {});
+        });
+        video.addEventListener('playing', onPlaying, { once: true });
+        hls.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) {
+            setTimeout(() => { hls.loadSource(STREAM_URL); hls.startLoad(); }, 5000);
+          }
+        });
+      } else {
+        // Последний fallback — прямое src
+        video.src = STREAM_URL;
+        video.addEventListener('playing', onPlaying, { once: true });
+        video.play().catch(() => {});
+      }
+    }
+
+    initStream();
+
+    // Кнопка mute / unmute
+    muteBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      iconMuted.style.display = video.muted ? ''     : 'none';
+      iconSound.style.display = video.muted ? 'none' : '';
+    });
+  })();
+
+  /* ── Waveform bars ── */
+  const wf = document.getElementById('waveform');
+  const barCount = 20;
+  const heights = [30,55,40,70,50,85,35,60,75,45,80,55,65,40,70,50,60,35,55,65];
+  heights.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'player__bar';
+    bar.style.height = h + '%';
+    bar.style.setProperty('--d', (0.5 + Math.random() * 0.7).toFixed(2) + 's');
+    bar.style.setProperty('--delay', (Math.random() * 0.5).toFixed(2) + 's');
+    wf.appendChild(bar);
+  });
+
+  /* ── Play/pause toggle ── */
+  let playing = false;
+  const playBtn = document.getElementById('play-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const bars = document.querySelectorAll('.player__bar');
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playIcon.style.display  = playing ? 'none'  : '';
+    pauseIcon.style.display = playing ? ''      : 'none';
+    bars.forEach((b, i) => {
+      if (playing) {
+        b.classList.add('active');
+        b.style.animationDelay = (Math.random() * 0.5).toFixed(2) + 's';
+      } else {
+        b.classList.remove('active');
+      }
+    });
+  });
+
+  /* ── Progress tick ── */
+  let pct = 24;
+  const fill = document.getElementById('progress-fill');
+  setInterval(() => {
+    pct = Math.min(pct + 0.01, 100);
+    fill.style.width = pct + '%';
+  }, 1000);
+
+  /* ── Filter buttons ── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
