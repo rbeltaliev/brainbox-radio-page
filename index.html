@@ -55,50 +55,86 @@
       z-index: 100;
       background: var(--color-paper-white);
       border-bottom: 1px solid var(--color-elephant-bone);
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
+      padding: 0 40px;
       height: 64px;
-    }
-    .nav__logo {
-      font-family: var(--font-heading);
-      font-size: 20px;
-      color: var(--color-night-sky);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .nav__logo-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--color-mint);
+      gap: 24px;
     }
     .nav__links {
       display: flex;
-      gap: 32px;
+      gap: 28px;
       list-style: none;
     }
     .nav__links a {
       font-size: 14px;
       color: var(--color-muted);
       transition: color .2s;
+      white-space: nowrap;
     }
     .nav__links a:hover,
-    .nav__links a.active {
+    .nav__links a.active { color: var(--color-night-sky); }
+    .nav__links a.active  { font-weight: 500; }
+
+    /* Logo — центр */
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 600;
       color: var(--color-night-sky);
+      letter-spacing: -.02em;
+      text-decoration: none;
     }
-    .nav__links a.active {
+    .nav__logo-icon {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+    }
+
+    /* Right side */
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .nav__user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--color-night-sky);
       font-weight: 500;
+      white-space: nowrap;
+    }
+    .nav__user-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--color-elephant-bone);
+    }
+    .nav__user-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .nav__user-arrow {
+      color: var(--color-mint);
+      font-size: 16px;
     }
     .nav__cta {
       background: var(--color-night-sky);
       color: var(--color-clear-white);
-      padding: 10px 24px;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
       font-size: 14px;
       font-weight: 500;
       transition: opacity .2s;
+      white-space: nowrap;
     }
     .nav__cta:hover { opacity: .8; }
 
@@ -891,8 +927,9 @@
       .episodes-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      .nav { padding: 0 20px; }
+      .nav { padding: 0 20px; grid-template-columns: 1fr auto; }
       .nav__links { display: none; }
+      .nav__right { display: none; }
       .hero { grid-template-columns: 1fr; padding: 0 20px; gap: 32px; }
       .hero__right { padding: 0 0 40px; justify-content: center; }
       .hero__video-wrap { max-width: 100%; }
@@ -912,19 +949,39 @@
 
 <!-- ─── NAV ──────────────────────────────────────── -->
 <nav class="nav">
-  <a href="/" class="nav__logo">
-    <span class="nav__logo-dot"></span>
-    Brainbox
-  </a>
+  <!-- Левые ссылки -->
   <ul class="nav__links">
     <li><a href="#">О платформе</a></li>
     <li><a href="#">Проекты</a></li>
-    <li><a href="#" class="active">Radio</a></li>
+    <li><a href="#">Венчурный автопилот</a></li>
     <li><a href="#">Вторичный рынок</a></li>
     <li><a href="#">Стартапам</a></li>
+    <li><a href="#">Фонд</a></li>
     <li><a href="#">FAQ</a></li>
   </ul>
-  <a href="#" class="nav__cta">Войти</a>
+
+  <!-- Логотип по центру -->
+  <a href="/" class="nav__logo">
+    <svg class="nav__logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2L25.26 8.5V21.5L14 28L2.74 21.5V8.5L14 2Z" fill="#0f1730"/>
+      <path d="M14 7L20.93 11V19L14 23L7.07 19V11L14 7Z" fill="#3b82f6" opacity=".9"/>
+      <path d="M14 11.5L17.46 13.5V17.5L14 19.5L10.54 17.5V13.5L14 11.5Z" fill="white"/>
+    </svg>
+    brainbox.VC
+  </a>
+
+  <!-- Правая часть -->
+  <div class="nav__right">
+    <div class="nav__user">
+      <div class="nav__user-avatar">
+        <img src="https://avatars.githubusercontent.com/u/rbeltaliev" alt="Альберт Алиев"
+             onerror="this.style.display='none'">
+      </div>
+      Альберт Алиев
+      <span class="nav__user-arrow">→</span>
+    </div>
+    <a href="#" class="nav__cta">Разместить стартап</a>
+  </div>
 </nav>
 
 <!-- ─── HERO / PLAYER ─────────────────────────────── -->
