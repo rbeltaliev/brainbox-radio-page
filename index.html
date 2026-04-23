@@ -172,7 +172,7 @@
 
     /* ─── HERO / PLAYER ─────────────────────────────────────── */
     .hero {
-      background: var(--color-night-sky);
+      background: linear-gradient(135deg, #1252a3 0%, #1976d2 45%, #42a5f5 100%);
       color: var(--color-paper-white);
       padding: 0 48px;
       display: grid;
@@ -181,6 +181,27 @@
       min-height: 520px;
       overflow: hidden;
       align-items: center;
+      position: relative;
+    }
+
+    /* Фоновый паттерн — THINK OUTSIDE THE BOX */
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
+    .hero__bg-word {
+      position: absolute;
+      font-family: var(--font-body);
+      font-weight: 900;
+      font-size: clamp(96px, 16vw, 210px);
+      color: rgba(8, 36, 90, 0.22);
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
     .hero__left {
       padding: 72px 0 72px;
@@ -196,7 +217,7 @@
       font-weight: 500;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--color-mint);
+      color: rgba(255,255,255,.85);
       margin-bottom: 24px;
     }
     .hero__live-dot {
@@ -986,6 +1007,14 @@
 
 <!-- ─── HERO / PLAYER ─────────────────────────────── -->
 <section class="hero">
+
+  <!-- Фоновый паттерн -->
+  <div class="hero__bg" aria-hidden="true">
+    <span class="hero__bg-word" style="top:-8%; left:-1%">THINK</span>
+    <span class="hero__bg-word" style="top:28%; left:-1%">OUTSIDE</span>
+    <span class="hero__bg-word" style="top:63%; left:-1%">THE BOX</span>
+  </div>
+
   <div class="hero__left">
     <div>
       <div class="hero__badge">
