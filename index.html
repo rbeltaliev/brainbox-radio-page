@@ -196,12 +196,81 @@
       position: absolute;
       font-family: var(--font-body);
       font-weight: 900;
-      font-size: clamp(96px, 16vw, 210px);
-      color: rgba(8, 36, 90, 0.22);
+      font-size: clamp(80px, 13vw, 175px);
+      color: rgba(6, 28, 75, 0.32);
       line-height: 0.88;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.02em;
       text-transform: uppercase;
       white-space: nowrap;
+    }
+    .hero__bg-word--mirror {
+      transform: scaleX(-1);
+      color: rgba(6, 28, 75, 0.22);
+    }
+
+    /* Счётчик зрителей */
+    .hero__viewers {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,.7);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .hero__viewers-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #ff4d4d;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* Twitch-style floating chat bubbles */
+    .hero__chat {
+      position: absolute;
+      bottom: 32px;
+      left: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero__chat-msg {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      white-space: nowrap;
+      animation: chat-in .4s cubic-bezier(.34,1.4,.64,1) both;
+    }
+    .hero__chat-msg:nth-child(1) { animation-delay: 0s; }
+    .hero__chat-msg:nth-child(2) { animation-delay: .15s; }
+    .hero__chat-msg:nth-child(3) { animation-delay: .3s; }
+    .hero__chat-name {
+      font-weight: 600;
+      font-size: 11px;
+    }
+    @keyframes chat-in {
+      from { opacity:0; transform: translateY(8px) scale(.96); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    /* Glow на видео */
+    @keyframes video-glow {
+      0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 0 30px rgba(66,165,245,.3), 0 20px 60px rgba(18,82,163,.5); }
+      50%       { box-shadow: 0 0 0 1px rgba(255,255,255,.15), 0 0 50px rgba(66,165,245,.5), 0 20px 60px rgba(18,82,163,.6); }
     }
     .hero__left {
       padding: 72px 0 72px;
@@ -414,7 +483,7 @@
       overflow: hidden;
       background: var(--color-dark-water);
       aspect-ratio: 16 / 9;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.07), var(--big-shadow);
+      animation: video-glow 3s ease-in-out infinite;
     }
     .hero__video {
       width: 100%;
@@ -983,10 +1052,14 @@
 
   <!-- Логотип по центру -->
   <a href="/" class="nav__logo">
-    <svg class="nav__logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14 2L25.26 8.5V21.5L14 28L2.74 21.5V8.5L14 2Z" fill="#0f1730"/>
-      <path d="M14 7L20.93 11V19L14 23L7.07 19V11L14 7Z" fill="#3b82f6" opacity=".9"/>
-      <path d="M14 11.5L17.46 13.5V17.5L14 19.5L10.54 17.5V13.5L14 11.5Z" fill="white"/>
+    <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Hexagon -->
+      <path d="M16 2L28.12 9V23L16 30L3.88 23V9L16 2Z" fill="#1976d2"/>
+      <!-- 4 dots in 2x2 grid -->
+      <circle cx="12" cy="12.5" r="3.2" fill="white"/>
+      <circle cx="20" cy="12.5" r="3.2" fill="white"/>
+      <circle cx="12" cy="20.5" r="3.2" fill="white"/>
+      <circle cx="20" cy="20.5" r="3.2" fill="white"/>
     </svg>
     brainbox.VC
   </a>
@@ -1008,18 +1081,24 @@
 <!-- ─── HERO / PLAYER ─────────────────────────────── -->
 <section class="hero">
 
-  <!-- Фоновый паттерн -->
+  <!-- Фоновый паттерн — прямой + зеркальный как в YouTube-баннере -->
   <div class="hero__bg" aria-hidden="true">
-    <span class="hero__bg-word" style="top:-8%; left:-1%">THINK</span>
-    <span class="hero__bg-word" style="top:28%; left:-1%">OUTSIDE</span>
-    <span class="hero__bg-word" style="top:63%; left:-1%">THE BOX</span>
+    <span class="hero__bg-word" style="top:-6%; left:-1%">THINK OUTSIDE THE BOX</span>
+    <span class="hero__bg-word hero__bg-word--mirror" style="top:30%; left:-1%">THINK OUTSIDE THE BOX</span>
+    <span class="hero__bg-word" style="top:62%; left:-1%">THINK OUTSIDE THE BOX</span>
   </div>
 
   <div class="hero__left">
     <div>
-      <div class="hero__badge">
-        <span class="hero__live-dot"></span>
-        В эфире сейчас
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+        <div class="hero__badge" style="margin-bottom:0">
+          <span class="hero__live-dot"></span>
+          В эфире сейчас
+        </div>
+        <div class="hero__viewers">
+          <span class="hero__viewers-dot"></span>
+          <span id="viewer-count">1 247</span> смотрят
+        </div>
       </div>
       <h1 class="hero__title">Brainbox<br>Radio</h1>
       <p class="hero__subtitle">
@@ -1088,6 +1167,23 @@
       </div>
     </div>
   </div>
+
+  <!-- Twitch-style chat bubbles -->
+  <div class="hero__chat" aria-hidden="true">
+    <div class="hero__chat-msg">
+      <span class="hero__chat-name" style="color:#ff9f43">AlexVC</span>
+      🔥 огонь эфир!
+    </div>
+    <div class="hero__chat-msg">
+      <span class="hero__chat-name" style="color:#48dbfb">startup_fan</span>
+      когда следующий гость?
+    </div>
+    <div class="hero__chat-msg">
+      <span class="hero__chat-name" style="color:#a29bfe">Marina_K</span>
+      👏 интересно про раунд
+    </div>
+  </div>
+
 </section>
 
 <!-- ─── SCHEDULE ──────────────────────────────────── -->
@@ -1513,6 +1609,18 @@
 </footer>
 
 <script>
+  /* ── Viewer count — случайные колебания как на Twitch ── */
+  (function() {
+    const el = document.getElementById('viewer-count');
+    if (!el) return;
+    let base = 1247;
+    setInterval(() => {
+      base += Math.floor((Math.random() - 0.45) * 7);
+      base = Math.max(800, Math.min(2000, base));
+      el.textContent = base.toLocaleString('ru-RU');
+    }, 4000);
+  })();
+
   /* ── Live video stream (iframe) ── */
   (function () {
     const iframe      = document.getElementById('live-video');
