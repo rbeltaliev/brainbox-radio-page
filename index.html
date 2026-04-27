@@ -172,7 +172,7 @@
 
     /* ─── HERO / PLAYER ─────────────────────────────────────── */
     .hero {
-      background: linear-gradient(135deg, #1252a3 0%, #1976d2 45%, #42a5f5 100%);
+      background: #071176;
       color: var(--color-paper-white);
       padding: 0 48px;
       display: grid;
@@ -192,12 +192,18 @@
       pointer-events: none;
       user-select: none;
     }
+    .hero__bg-waves {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
     .hero__bg-word {
       position: absolute;
       font-family: var(--font-body);
       font-weight: 900;
       font-size: clamp(80px, 13vw, 175px);
-      color: rgba(6, 28, 75, 0.32);
+      color: rgba(255,255,255,0.05);
       line-height: 0.88;
       letter-spacing: -0.02em;
       text-transform: uppercase;
@@ -205,7 +211,6 @@
     }
     .hero__bg-word--mirror {
       transform: scaleX(-1);
-      color: rgba(6, 28, 75, 0.22);
     }
 
     /* Счётчики просмотров/прослушиваний */
@@ -1090,8 +1095,77 @@
 <!-- ─── HERO / PLAYER ─────────────────────────────── -->
 <section class="hero">
 
-  <!-- Фоновый паттерн — прямой + зеркальный как в YouTube-баннере -->
+  <!-- Фоновый паттерн — SVG волны + текст поверх -->
   <div class="hero__bg" aria-hidden="true">
+
+    <!-- SVG волны, полностью CSS без изображений -->
+    <svg class="hero__bg-waves" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1040c0"/>
+          <stop offset="100%" stop-color="#071176" stop-opacity="0.8"/>
+        </linearGradient>
+        <linearGradient id="wg2" x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stop-color="#1565e0"/>
+          <stop offset="55%" stop-color="#0d3aaa"/>
+          <stop offset="100%" stop-color="#071176" stop-opacity="0.7"/>
+        </linearGradient>
+        <linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d50d0"/>
+          <stop offset="100%" stop-color="#071176"/>
+        </linearGradient>
+        <!-- Центральное свечение -->
+        <radialGradient id="glowC" cx="50%" cy="54%" r="48%">
+          <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.60"/>
+          <stop offset="12%"  stop-color="#80d8ff" stop-opacity="0.50"/>
+          <stop offset="30%"  stop-color="#2979ff" stop-opacity="0.22"/>
+          <stop offset="55%"  stop-color="#1a4fc8" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#071176" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Фильтр свечения для краёв волн -->
+        <filter id="eg" x="-20%" y="-300%" width="140%" height="700%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Основа -->
+      <rect width="1440" height="520" fill="#071176"/>
+
+      <!-- Волна 1: большой верхний слой -->
+      <path d="M -100 -30 C 180 130, 420 -10, 700 90 C 980 190, 1200 30, 1540 110 L 1540 -100 L -100 -100 Z"
+            fill="url(#wg1)" opacity="0.92"/>
+      <path d="M -100 -30 C 180 130, 420 -10, 700 90 C 980 190, 1200 30, 1540 110"
+            fill="none" stroke="#40b4ff" stroke-width="3" opacity="0.5" filter="url(#eg)"/>
+
+      <!-- Волна 2: средняя S-кривая (главная лента) -->
+      <path d="M -100 205 C 120 75, 370 245, 640 175 C 910 105, 1170 310, 1440 240
+               L 1440 375 C 1170 445, 910 245, 640 315 C 370 385, 120 225, -100 345 Z"
+            fill="url(#wg2)" opacity="0.88"/>
+      <path d="M -100 205 C 120 75, 370 245, 640 175 C 910 105, 1170 310, 1440 240"
+            fill="none" stroke="#29c6f6" stroke-width="3.5" opacity="0.65" filter="url(#eg)"/>
+
+      <!-- Волна 3: нижняя часть -->
+      <path d="M -100 390 C 220 315, 500 435, 780 375 C 1060 315, 1290 455, 1540 405 L 1540 620 L -100 620 Z"
+            fill="url(#wg3)" opacity="0.82"/>
+      <path d="M -100 390 C 220 315, 500 435, 780 375 C 1060 315, 1290 455, 1540 405"
+            fill="none" stroke="#00c8ff" stroke-width="3" opacity="0.55" filter="url(#eg)"/>
+
+      <!-- Волна 4: самая нижняя -->
+      <path d="M -100 462 C 310 400, 620 490, 920 442 C 1220 394, 1390 498, 1540 460 L 1540 620 L -100 620 Z"
+            fill="#0a2ea8" opacity="0.6"/>
+      <path d="M -100 462 C 310 400, 620 490, 920 442 C 1220 394, 1390 498, 1540 460"
+            fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.4" filter="url(#eg)"/>
+
+      <!-- Тёмный акцент верхний правый -->
+      <path d="M 920 -100 C 1080 70, 1270 -10, 1540 55 L 1540 -100 Z"
+            fill="#0e2db0" opacity="0.75"/>
+
+      <!-- Центральное свечение поверх всего -->
+      <rect width="1440" height="520" fill="url(#glowC)"/>
+    </svg>
+
+    <!-- Текстовый паттерн поверх волн -->
     <span class="hero__bg-word" style="top:-6%; left:-1%">THINK OUTSIDE THE BOX</span>
     <span class="hero__bg-word hero__bg-word--mirror" style="top:30%; left:-1%">THINK OUTSIDE THE BOX</span>
     <span class="hero__bg-word" style="top:62%; left:-1%">THINK OUTSIDE THE BOX</span>
