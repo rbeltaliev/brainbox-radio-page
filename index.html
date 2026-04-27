@@ -176,7 +176,7 @@
       color: var(--color-paper-white);
       padding: 0 48px;
       display: block;
-      min-height: calc(144px + min(27vw, 513px));
+      min-height: 0;
       overflow: hidden;
       position: relative;
     }
@@ -335,7 +335,8 @@
     .hero__right {
       position: absolute;
       right: clamp(40px, 9.5vw, 180px);
-      top: 72px;
+      top: 50%;
+      transform: translateY(-50%);
       width: min(48vw, 912px);
       aspect-ratio: 16 / 9;
       border-radius: 36px;
@@ -883,8 +884,8 @@
       .episodes-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 1024px) and (min-width: 769px) {
-      .hero { min-height: calc(120px + min(26vw, 360px)); }
-      .hero__right { width: min(46vw, 640px); top: 60px; }
+      .hero { min-height: 0; }
+      .hero__right { width: min(46vw, 640px); top: 50%; transform: translateY(-50%); }
       .hero__left { max-width: min(420px, 46%); }
     }
 
