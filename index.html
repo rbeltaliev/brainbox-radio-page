@@ -176,7 +176,7 @@
       color: var(--color-paper-white);
       padding: 0 48px;
       display: block;
-      min-height: max(760px, 56.25vw);
+      min-height: calc(144px + min(27vw, 513px));
       overflow: hidden;
       position: relative;
     }
@@ -843,7 +843,7 @@
       .episodes-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 1024px) and (min-width: 769px) {
-      .hero { min-height: max(620px, 60vw); }
+      .hero { min-height: calc(120px + min(26vw, 360px)); }
       .hero__right { width: min(46vw, 640px); top: 60px; }
       .hero__left { max-width: min(420px, 46%); }
     }
