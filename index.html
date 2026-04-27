@@ -879,6 +879,287 @@
     .footer__links { display: flex; gap: 24px; }
     .footer__links a:hover { color: var(--color-paper-white); }
 
+    /* ─── SONG REQUEST SECTION ──────────────────────────────── */
+    .songreq {
+      background: #09101f;
+      border-radius: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* Левая колонка — превью виджета */
+    .songreq__preview {
+      background: linear-gradient(160deg, #111827 0%, #0f2340 55%, #0a1a30 100%);
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .songreq__preview-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      margin-bottom: 24px;
+      align-self: flex-start;
+    }
+
+    /* Карточка виджета */
+    .sr-card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(8,18,38,0.78);
+      border: 1px solid rgba(26,144,212,0.28);
+      backdrop-filter: blur(24px);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .sr-card__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 16px 11px;
+      border-bottom: 1px solid rgba(26,144,212,0.18);
+      background: rgba(26,144,212,0.08);
+    }
+    .sr-card__header-icon {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #1a90d4, #0d6fa8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .sr-card__header-title {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: #4db8f0; flex: 1;
+    }
+    .sr-card__header-price {
+      font-size: 11px; font-weight: 700; color: #4db8f0;
+      background: rgba(26,144,212,0.18);
+      border: 1px solid rgba(26,144,212,0.35);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .sr-card__track {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 16px 12px;
+    }
+    .sr-card__cover {
+      width: 68px; height: 68px;
+      border-radius: 10px; flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid rgba(26,144,212,0.45);
+      box-shadow: 0 0 28px rgba(26,144,212,0.35);
+      animation: sr-glow 2.5s ease-in-out infinite;
+      background: linear-gradient(135deg, #1a3a5e, #0d2040);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    @keyframes sr-glow {
+      0%,100% { box-shadow: 0 0 24px rgba(26,144,212,0.3); }
+      50%      { box-shadow: 0 0 40px rgba(26,144,212,0.55); }
+    }
+    .sr-card__track-info { flex: 1; min-width: 0; }
+    .sr-card__source {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,204,0,0.12);
+      border: 1px solid rgba(255,204,0,0.28);
+      border-radius: 4px; padding: 2px 7px;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: #ffcc00; margin-bottom: 6px;
+    }
+    .sr-card__artist {
+      font-size: 17px; font-weight: 800; color: white;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.15;
+    }
+    .sr-card__title {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-top: 3px;
+    }
+    .sr-card__eq {
+      display: flex; align-items: flex-end; gap: 3px;
+      height: 28px; flex-shrink: 0;
+    }
+    .sr-card__eq-bar {
+      width: 3px; border-radius: 2px;
+      background: linear-gradient(to top, #1a90d4, #4db8f0);
+      animation: sr-eq var(--d, 0.8s) ease-in-out infinite alternate;
+      transform-origin: bottom;
+    }
+    .sr-card__eq-bar:nth-child(1){--d:.70s;height:9px}
+    .sr-card__eq-bar:nth-child(2){--d:.52s;height:20px}
+    .sr-card__eq-bar:nth-child(3){--d:.88s;height:13px}
+    .sr-card__eq-bar:nth-child(4){--d:.61s;height:25px}
+    .sr-card__eq-bar:nth-child(5){--d:.79s;height:7px}
+    .sr-card__eq-bar:nth-child(6){--d:.95s;height:17px}
+    @keyframes sr-eq {
+      from { transform: scaleY(0.2); }
+      to   { transform: scaleY(1); }
+    }
+
+    .sr-card__divider {
+      height: 1px; background: rgba(255,255,255,0.07); margin: 0 16px;
+    }
+    .sr-card__from {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 16px;
+    }
+    .sr-card__avatar {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #2a4a7a, #1a3060);
+      border: 2px solid rgba(26,144,212,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .sr-card__from-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      margin-bottom: 2px;
+    }
+    .sr-card__from-name {
+      font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px;
+    }
+    .sr-card__message {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      font-style: italic; line-height: 1.5;
+      background: rgba(255,255,255,0.04);
+      border-left: 2px solid rgba(26,144,212,0.45);
+      padding: 5px 9px; border-radius: 0 5px 5px 0;
+    }
+    .sr-card__footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px 13px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .sr-card__footer-brand {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3);
+    }
+    .sr-card__footer-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #4db8f0;
+      animation: sr-dot 1.6s ease-in-out infinite;
+    }
+    @keyframes sr-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.35; transform: scale(0.6); }
+    }
+    .sr-card__queue {
+      font-size: 10px; color: rgba(255,255,255,0.28);
+    }
+    .sr-card__queue strong { color: rgba(255,255,255,0.55); }
+
+    /* Правая колонка — описание + форма */
+    .songreq__content {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      color: var(--color-paper-white);
+    }
+    .songreq__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #4db8f0;
+      background: rgba(26,144,212,0.12);
+      border: 1px solid rgba(26,144,212,0.3);
+      padding: 4px 12px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .songreq__title {
+      font-family: var(--font-heading);
+      font-size: clamp(26px, 2.5vw, 36px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: white;
+    }
+    .songreq__desc {
+      font-size: 15px;
+      color: rgba(249,248,246,0.55);
+      line-height: 1.65;
+      max-width: 400px;
+    }
+
+    /* Форма */
+    .songreq__form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .songreq__input,
+    .songreq__textarea {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: white;
+      outline: none;
+      transition: border-color .2s, background .2s;
+      width: 100%;
+    }
+    .songreq__input::placeholder,
+    .songreq__textarea::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+    .songreq__input:focus,
+    .songreq__textarea:focus {
+      border-color: rgba(26,144,212,0.6);
+      background: rgba(255,255,255,0.09);
+    }
+    .songreq__textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+    .songreq__submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1a90d4, #0d6fa8);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      transition: opacity .2s, transform .2s;
+      align-self: flex-start;
+    }
+    .songreq__submit:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+    .songreq__submit-price {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
       .episodes-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1494,6 +1775,88 @@
       </div>
 
     </div><!-- /episodes-grid -->
+  </div>
+</section>
+
+<!-- ─── SONG REQUEST ─────────────────────────────── -->
+<section class="section" id="request">
+  <div class="container">
+    <div class="songreq">
+
+      <!-- Левая колонка: превью OBS-виджета -->
+      <div class="songreq__preview">
+        <div class="songreq__preview-label">Так выглядит в эфире</div>
+        <div class="sr-card">
+          <div class="sr-card__header">
+            <div class="sr-card__header-icon">🎵</div>
+            <div class="sr-card__header-title">Песня по заявке</div>
+            <div class="sr-card__header-price">💸 99 ₽</div>
+          </div>
+          <div class="sr-card__track">
+            <div class="sr-card__cover">🎵</div>
+            <div class="sr-card__track-info">
+              <div class="sr-card__source">🎧 Яндекс.Музыка</div>
+              <div class="sr-card__artist">Coldplay</div>
+              <div class="sr-card__title">Sky Full of Stars</div>
+            </div>
+            <div class="sr-card__eq">
+              <div class="sr-card__eq-bar"></div>
+              <div class="sr-card__eq-bar"></div>
+              <div class="sr-card__eq-bar"></div>
+              <div class="sr-card__eq-bar"></div>
+              <div class="sr-card__eq-bar"></div>
+              <div class="sr-card__eq-bar"></div>
+            </div>
+          </div>
+          <div class="sr-card__divider"></div>
+          <div class="sr-card__from">
+            <div class="sr-card__avatar">👤</div>
+            <div>
+              <div class="sr-card__from-label">Заказал</div>
+              <div class="sr-card__from-name">Алексей Ковалёв</div>
+              <div class="sr-card__message">«Для всей команды Brainbox! Вы делаете крутое дело!»</div>
+            </div>
+          </div>
+          <div class="sr-card__footer">
+            <div class="sr-card__footer-brand">
+              <div class="sr-card__footer-dot"></div>
+              brainbox.VC Radio
+            </div>
+            <div class="sr-card__queue">В очереди: <strong>2 трека</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Правая колонка: описание + форма -->
+      <div class="songreq__content">
+        <div class="songreq__badge">🎵 Интерактив</div>
+        <h2 class="songreq__title">Закажи песню<br>в прямом эфире</h2>
+        <p class="songreq__desc">
+          Отправь ссылку на трек из Яндекс.Музыки — и мы поставим его в эфир.
+          Твоё имя и сообщение появятся на экране у всех зрителей.
+        </p>
+        <form class="songreq__form" onsubmit="return false;">
+          <input
+            class="songreq__input"
+            type="url"
+            placeholder="Ссылка на песню в Яндекс.Музыке"
+          >
+          <textarea
+            class="songreq__textarea"
+            placeholder="Сопроводительный текст — кому передаёшь, от кого (необязательно)"
+          ></textarea>
+          <button class="songreq__submit" type="submit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            Отправить
+            <span class="songreq__submit-price">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              99 ₽
+            </span>
+          </button>
+        </form>
+      </div>
+
+    </div>
   </div>
 </section>
 
