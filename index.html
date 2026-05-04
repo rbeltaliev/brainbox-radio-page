@@ -2514,7 +2514,10 @@
 /* ═══════════════════════════════════════════════════════
    РАСПИСАНИЕ НА СЕГОДНЯ
 ════════════════════════════════════════════════════════ */
-const API_URL = 'https://brainbox-radio-production.up.railway.app';
+// Автоматически выбираем бэкенд по текущему домену
+const API_URL = window.location.hostname.includes('staging')
+  ? 'https://brainbox-radio-staging.up.railway.app'
+  : 'https://brainbox-radio-production.up.railway.app';
 
 async function loadSchedule() {
   const grid = document.getElementById('schedule-grid');
