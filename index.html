@@ -2350,19 +2350,8 @@
         <h3>Подписывайтесь и не пропускайте эфиры</h3>
         <p>Уведомления о новых выпусках, эксклюзивные материалы<br>и анонсы гостей — прямо в вашем подкаст-плеере</p>
       </div>
-      <div class="subscribe-banner__platforms">
-        <a href="#" class="platform-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          YouTube
-        </a>
-        <a href="#" class="platform-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          Telegram
-        </a>
-        <a href="#" class="platform-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-          Apple Podcasts
-        </a>
+      <div class="subscribe-banner__platforms" id="platforms-list">
+        <!-- динамически загружается из API -->
       </div>
     </div>
   </div>
@@ -2579,6 +2568,40 @@ async function loadSchedule() {
 // Загрузить при старте и обновлять каждую минуту
 loadSchedule();
 setInterval(loadSchedule, 60_000);
+
+/* ═══════════════════════════════════════════════════════
+   ПЛАТФОРМЫ "ГДЕ СЛУШАТЬ"
+════════════════════════════════════════════════════════ */
+const PLATFORM_EMOJI = {
+  youtube:       '▶️',
+  vk:            '🔵',
+  telegram:      '✈️',
+  twitch:        '🟣',
+  rutube:        '🔴',
+  apple_podcasts:'🎙',
+  yandex_music:  '🎵',
+  spotify:       '🟢',
+  custom:        '🔗',
+};
+
+async function loadPlatforms() {
+  const container = document.getElementById('platforms-list');
+  if (!container) return;
+  try {
+    const res  = await fetch(`${API_URL}/api/platforms`);
+    const data = await res.json();
+    if (!data.ok || !data.platforms.length) return;
+    container.innerHTML = data.platforms.map(p => `
+      <a href="${p.stream_url}" target="_blank" rel="noopener" class="platform-btn">
+        <span style="font-size:18px">${PLATFORM_EMOJI[p.icon_type] || '🔗'}</span>
+        ${p.name}
+      </a>
+    `).join('');
+  } catch (e) {
+    console.warn('[platforms] load error:', e.message);
+  }
+}
+loadPlatforms();
 
 /* ═══════════════════════════════════════════════════════
    ФОРМА ЗАЯВКИ ГОСТЯ
