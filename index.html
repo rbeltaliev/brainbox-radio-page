@@ -2110,22 +2110,12 @@
       <div class="news-ticker-wrap">
         <div class="news-ticker-header">
           <div class="news-ticker-badge">Сейчас в эфире</div>
-          <span class="news-ticker-label">Виджет «Венчур» — бегущая строка на экране</span>
+          <span class="news-ticker-label">Новости стартапов — бегущая строка на экране</span>
         </div>
-        <div class="news-ticker-bar">
+        <div class="news-ticker-bar" id="news-ticker-bar">
           <div class="news-ticker-icon">📰</div>
           <div class="news-ticker-scroll-wrap">
-            <span class="news-ticker-scroll">
-              <span class="ticker-kw">KodeLab</span> привлёк ₽7 млн в рамках краудфандинга на платформе Brainbox
-              <span class="ticker-sep">|</span>
-              <span class="ticker-kw">OpenAI</span> привлекла $40 млрд при оценке $300 млрд
-              <span class="ticker-sep">|</span>
-              <span class="ticker-kw">Bit za Bid</span> закрыл раунд на ₽7 млн — музыкальный сервис для стартапов
-              <span class="ticker-sep">|</span>
-              <span class="ticker-kw">Yandex Cloud</span> запускает новую ML-платформу для разработчиков
-              <span class="ticker-sep">|</span>
-              <span class="ticker-kw">brainbox.VC</span> открыл регистрацию на питч-сессию · Вторник 15:00
-            </span>
+            <span class="news-ticker-scroll" id="news-ticker-scroll">Загрузка…</span>
           </div>
         </div>
       </div>
@@ -2133,72 +2123,79 @@
       <!-- Зоны 2 + 3: архив и форма -->
       <div class="news-body">
 
-        <!-- Архив опубликованных новостей -->
+        <!-- Список активных новостей из API -->
         <div class="news-archive">
-          <div class="news-archive__title">Опубликованные новости</div>
-          <div class="news-archive__list">
-            <div class="news-item">
-              <div class="news-item__meta">
-                <span class="news-item__company">KodeLab</span>
-                <span class="news-item__date">28 апр</span>
-              </div>
-              <div class="news-item__text">Привлёк ₽7 млн в рамках краудфандинга на платформе Brainbox</div>
-            </div>
-            <div class="news-item">
-              <div class="news-item__meta">
-                <span class="news-item__company">Bit za Bid</span>
-                <span class="news-item__date">26 апр</span>
-              </div>
-              <div class="news-item__text">Закрыл раунд на ₽7 млн — музыкальный сервис для независимых артистов</div>
-            </div>
-            <div class="news-item">
-              <div class="news-item__meta">
-                <span class="news-item__company">DataFlow AI</span>
-                <span class="news-item__date">24 апр</span>
-              </div>
-              <div class="news-item__text">Запустил бета-версию платформы автоматизации отчётности для CFO</div>
-            </div>
-            <div class="news-item">
-              <div class="news-item__meta">
-                <span class="news-item__company">GreenRoute</span>
-                <span class="news-item__date">22 апр</span>
-              </div>
-              <div class="news-item__text">Вышел на рынок ОАЭ, первый контракт с логистическим оператором</div>
-            </div>
+          <div class="news-archive__title">Сейчас в бегущей строке</div>
+          <div class="news-archive__list" id="news-active-list">
+            <div style="color:#64748b;font-size:13px">Загрузка…</div>
           </div>
         </div>
 
         <!-- Форма отправки -->
         <div class="news-form-wrap">
-          <div class="news-form__heading">
-            <h2 class="news-form__title">Отправь новость<br>своего стартапа</h2>
-            <p class="news-form__desc">
-              Твоя новость появится в бегущей строке прямого эфира —
-              перед аудиторией IT-предпринимателей и инвесторов.
-            </p>
-          </div>
-          <form class="news-form" onsubmit="return false;">
-            <div class="news-form__field-wrap">
-              <textarea
-                class="news-form__textarea"
-                placeholder="Текст новости — коротко и по делу (до 120 символов)"
-                maxlength="120"
-                id="news-text"
-                oninput="document.getElementById('news-counter').textContent = this.value.length + '/120'"
-              ></textarea>
-              <span class="news-form__counter" id="news-counter">0/120</span>
+          <div id="news-form-view">
+            <div class="news-form__heading">
+              <h2 class="news-form__title">Отправь новость<br>своего стартапа</h2>
+              <p class="news-form__desc">
+                Твоя новость появится в бегущей строке прямого эфира —
+                перед аудиторией IT-предпринимателей и инвесторов.
+              </p>
             </div>
-            <input
-              class="news-form__input"
-              type="url"
-              placeholder="Ссылка на источник (необязательно)"
-            >
-            <button class="news-form__submit" type="submit">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-              Опубликовать
-              <span class="news-form__submit-price">299 ₽</span>
+            <form class="news-form" id="news-form" onsubmit="return false;">
+              <input
+                class="news-form__input"
+                type="text"
+                placeholder="Название компании или источника"
+                maxlength="80"
+                id="news-source"
+                style="margin-bottom: 10px;"
+              >
+              <div class="news-form__field-wrap">
+                <textarea
+                  class="news-form__textarea"
+                  placeholder="Текст новости — коротко и по делу (до 280 символов)"
+                  maxlength="280"
+                  id="news-text"
+                  oninput="document.getElementById('news-counter').textContent = this.value.length + '/280'"
+                ></textarea>
+                <span class="news-form__counter" id="news-counter">0/280</span>
+              </div>
+              <div style="font-size:12px;color:#64748b;margin-bottom:12px">
+                В эфире будет: «<span id="news-preview-source" style="color:#4db8f0">Компания</span> · текст новости»
+              </div>
+              <button class="news-form__submit" type="submit" id="news-submit">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                Получить код оплаты
+                <span class="news-form__submit-price">299 ₽</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Шаг 2: показываем код и инструкцию -->
+          <div id="news-payment-view" style="display:none">
+            <div class="news-form__heading">
+              <h2 class="news-form__title">Почти готово!</h2>
+              <p class="news-form__desc">Задонать <strong>299 ₽</strong> на DonationAlerts и укажи этот код в комментарии — новость выйдет в эфир автоматически.</p>
+            </div>
+            <div style="background:#0f1520;border:1px solid #1e2d42;border-radius:12px;padding:20px;margin-bottom:16px;text-align:center">
+              <div style="font-size:11px;color:#64748b;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Твой код</div>
+              <div style="font-size:28px;font-weight:800;color:#4db8f0;letter-spacing:4px" id="payment-code-display">RB-XXXXXX</div>
+            </div>
+            <a id="da-link" href="https://www.donationalerts.com/r/radiobrainbox" target="_blank"
+               style="display:flex;align-items:center;justify-content:center;gap:8px;
+                      background:#4db8f0;color:#080c14;font-weight:700;font-size:14px;
+                      border-radius:10px;padding:13px;text-decoration:none;margin-bottom:12px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              Задонатить на DonationAlerts
+            </a>
+            <p style="font-size:12px;color:#64748b;text-align:center">
+              После оплаты новость появится в эфире в течение минуты
+            </p>
+            <button onclick="resetNewsForm()"
+              style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;margin-top:8px;text-decoration:underline;display:block;margin-left:auto;margin-right:auto">
+              Отправить ещё одну новость
             </button>
-          </form>
+          </div>
         </div>
 
       </div>
@@ -2605,6 +2602,119 @@ async function loadPlatforms() {
   }
 }
 loadPlatforms();
+
+/* ═══════════════════════════════════════════════════════
+   НОВОСТИ СТАРТАПОВ — тикер + архив + форма
+════════════════════════════════════════════════════════ */
+
+async function loadTickerNews() {
+  try {
+    const res  = await fetch(`${API_URL}/api/ticker/active`);
+    const data = await res.json();
+    const items = data.items || [];
+
+    // Бегущая строка
+    const scroll = document.getElementById('news-ticker-scroll');
+    if (scroll) {
+      if (items.length) {
+        scroll.innerHTML = items.map((item, i) =>
+          `<span class="ticker-kw">${siteEsc(item.source_name)}</span> ${siteEsc(item.text)}` +
+          (i < items.length - 1 ? ' <span class="ticker-sep">|</span> ' : '')
+        ).join('');
+      } else {
+        scroll.textContent = 'Здесь появятся новости стартапов';
+      }
+    }
+
+    // Список под формой
+    const list = document.getElementById('news-active-list');
+    if (list) {
+      if (!items.length) {
+        list.innerHTML = '<div style="color:#64748b;font-size:13px">Пока нет активных новостей — стань первым!</div>';
+      } else {
+        list.innerHTML = items.map(item => `
+          <div class="news-item">
+            <div class="news-item__meta">
+              <span class="news-item__company">${siteEsc(item.source_name)}</span>
+              <span class="news-item__date">${fmtNewsDate(item.activated_at)}</span>
+            </div>
+            <div class="news-item__text">${siteEsc(item.text)}</div>
+          </div>`).join('');
+      }
+    }
+  } catch (e) {
+    console.warn('[ticker] load error:', e.message);
+  }
+}
+
+function siteEsc(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function fmtNewsDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'short' });
+}
+
+// Превью источника в форме
+const newsSourceInput = document.getElementById('news-source');
+if (newsSourceInput) {
+  newsSourceInput.addEventListener('input', () => {
+    const preview = document.getElementById('news-preview-source');
+    if (preview) preview.textContent = newsSourceInput.value.trim() || 'Компания';
+  });
+}
+
+// Отправка формы
+const newsForm = document.getElementById('news-form');
+if (newsForm) {
+  newsForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const source_name = document.getElementById('news-source').value.trim();
+    const text        = document.getElementById('news-text').value.trim();
+
+    if (!source_name) { alert('Укажи название компании или источника'); return; }
+    if (!text)        { alert('Напиши текст новости'); return; }
+
+    const btn = document.getElementById('news-submit');
+    btn.disabled = true; btn.textContent = 'Отправляем…';
+
+    try {
+      const res  = await fetch(`${API_URL}/api/ticker/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source_name, text }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        document.getElementById('payment-code-display').textContent = data.payment_code;
+        document.getElementById('news-form-view').style.display    = 'none';
+        document.getElementById('news-payment-view').style.display = 'block';
+      } else {
+        alert('Ошибка: ' + data.error);
+        btn.disabled = false; btn.textContent = 'Получить код оплаты';
+      }
+    } catch (err) {
+      alert('Ошибка соединения. Попробуй ещё раз.');
+      btn.disabled = false; btn.textContent = 'Получить код оплаты';
+    }
+  });
+}
+
+function resetNewsForm() {
+  document.getElementById('news-source').value = '';
+  document.getElementById('news-text').value   = '';
+  document.getElementById('news-counter').textContent = '0/280';
+  document.getElementById('news-preview-source').textContent = 'Компания';
+  const submitBtn = document.getElementById('news-submit');
+  submitBtn.disabled  = false;
+  submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Получить код оплаты <span class="news-form__submit-price">299 ₽</span>';
+  document.getElementById('news-form-view').style.display    = 'block';
+  document.getElementById('news-payment-view').style.display = 'none';
+}
+
+loadTickerNews();
 
 /* ═══════════════════════════════════════════════════════
    ФОРМА ЗАЯВКИ ГОСТЯ
