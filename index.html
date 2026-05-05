@@ -2171,28 +2171,36 @@
             </form>
           </div>
 
-          <!-- Шаг 2: показываем код и инструкцию -->
+          <!-- Шаг 2: QR-код для оплаты -->
           <div id="news-payment-view" style="display:none">
             <div class="news-form__heading">
-              <h2 class="news-form__title">Почти готово!</h2>
-              <p class="news-form__desc">Задонать <strong>299 ₽</strong> на DonationAlerts и укажи этот код в комментарии — новость выйдет в эфир автоматически.</p>
+              <h2 class="news-form__title">Отсканируй и оплати</h2>
+              <p class="news-form__desc">Сумма и код уже вписаны — просто выбери способ оплаты.</p>
             </div>
-            <div style="background:#0f1520;border:1px solid #1e2d42;border-radius:12px;padding:20px;margin-bottom:16px;text-align:center">
-              <div style="font-size:11px;color:#64748b;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Твой код</div>
-              <div style="font-size:28px;font-weight:800;color:#4db8f0;letter-spacing:4px" id="payment-code-display">RB-XXXXXX</div>
+
+            <!-- QR-код -->
+            <div style="display:flex;flex-direction:column;align-items:center;
+                        background:#fff;border-radius:16px;padding:20px;margin-bottom:16px">
+              <div id="news-qr-code"></div>
+              <div style="font-size:11px;color:#94a3b8;margin-top:10px">
+                299 ₽ · <span id="payment-code-display" style="font-weight:600;color:#4db8f0">RB-XXXXXX</span>
+              </div>
             </div>
+
+            <!-- Кнопка для десктопа / если QR не сканируется -->
             <a id="da-link" href="https://www.donationalerts.com/r/rbelt" target="_blank"
                style="display:flex;align-items:center;justify-content:center;gap:8px;
-                      background:#4db8f0;color:#080c14;font-weight:700;font-size:14px;
-                      border-radius:10px;padding:13px;text-decoration:none;margin-bottom:12px">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-              Задонатить на DonationAlerts
+                      background:none;border:1px solid #1e2d42;color:#94a3b8;font-size:13px;
+                      border-radius:10px;padding:11px;text-decoration:none;margin-bottom:8px">
+              Открыть страницу оплаты в браузере
             </a>
-            <p style="font-size:12px;color:#64748b;text-align:center">
+
+            <p style="font-size:12px;color:#64748b;text-align:center;margin-bottom:8px">
               После оплаты новость появится в эфире в течение минуты
             </p>
             <button onclick="resetNewsForm()"
-              style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;margin-top:8px;text-decoration:underline;display:block;margin-left:auto;margin-right:auto">
+              style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;
+                     text-decoration:underline;display:block;margin:0 auto">
               Отправить ещё одну новость
             </button>
           </div>
@@ -2688,7 +2696,25 @@ if (newsForm) {
       const data = await res.json();
 
       if (data.ok) {
-        document.getElementById('payment-code-display').textContent = data.payment_code;
+        const code   = data.payment_code;
+        const daUrl  = `https://www.donationalerts.com/r/rbelt?sum=299&comment=${encodeURIComponent(code)}`;
+
+        document.getElementById('payment-code-display').textContent = code;
+        document.getElementById('da-link').href = daUrl;
+
+        // Генерируем QR-код
+        const qrEl = document.getElementById('news-qr-code');
+        qrEl.innerHTML = '';
+        if (window.QRCode) {
+          new QRCode(qrEl, { text: daUrl, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+        } else {
+          // Загружаем qrcode.js лениво при первом использовании
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js';
+          s.onload = () => new QRCode(qrEl, { text: daUrl, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+          document.head.appendChild(s);
+        }
+
         document.getElementById('news-form-view').style.display    = 'none';
         document.getElementById('news-payment-view').style.display = 'block';
       } else {
