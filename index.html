@@ -2095,18 +2095,36 @@
             </div>
 
             <a id="da-link" href="https://www.donationalerts.com/r/rbelt" target="_blank"
+               onclick="startNewsPolling()"
                class="news-form__submit"
                style="display:flex;align-items:center;justify-content:center;gap:8px;
-                      text-decoration:none;margin-bottom:12px">
+                      text-decoration:none;margin-bottom:10px">
               Открыть DonationAlerts →
             </a>
 
-            <p style="font-size:12px;color:#64748b;text-align:center;margin-bottom:8px">
-              После оплаты новость появится в эфире в течение минуты
-            </p>
+            <button id="news-check-btn" onclick="checkNewsPaid()"
+              style="display:none;width:100%;background:none;border:1px solid #1e2d42;color:#64748b;
+                     font-size:13px;border-radius:10px;padding:10px;cursor:pointer;margin-bottom:8px">
+              Я оплатил — проверить →
+            </button>
+
             <button onclick="resetNewsForm()"
               style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;
                      text-decoration:underline;display:block;margin:0 auto">
+              Отправить ещё одну новость
+            </button>
+          </div>
+
+          <!-- Успех -->
+          <div id="news-success-view" style="display:none;text-align:center;padding:20px 0">
+            <div style="font-size:36px;margin-bottom:12px">✓</div>
+            <h2 class="news-form__title" style="margin-bottom:10px">Новость принята!</h2>
+            <p class="news-form__desc" style="margin-bottom:20px">
+              Она появится в бегущей строке во время ближайшего эфира.
+            </p>
+            <button onclick="resetNewsForm()"
+              style="background:none;border:1px solid #1e2d42;color:#64748b;font-size:13px;
+                     border-radius:10px;padding:10px 20px;cursor:pointer">
               Отправить ещё одну новость
             </button>
           </div>
@@ -2706,6 +2724,9 @@ if (newsForm) {
 
       if (data.ok) {
         const code = data.payment_code;
+        _newsPollCode  = code;
+        _newsPollTimer = null;
+        document.getElementById('news-check-btn').style.display    = 'none';
         document.getElementById('payment-code-display').textContent = code;
 
         document.getElementById('news-form-view').style.display    = 'none';
@@ -2721,7 +2742,37 @@ if (newsForm) {
   });
 }
 
+let _newsPollCode  = null;
+let _newsPollTimer = null;
+
+function startNewsPolling() {
+  if (_newsPollTimer) return;
+  setTimeout(() => {
+    document.getElementById('news-check-btn').style.display = '';
+  }, 8000);
+  _newsPollTimer = setInterval(checkNewsPaid, 6000);
+}
+
+async function checkNewsPaid() {
+  if (!_newsPollCode) return;
+  try {
+    const res  = await fetch(`${API_URL}/api/ticker/check/${_newsPollCode}`);
+    const data = await res.json();
+    if (data.ok && data.status === 'active') showNewsSuccess();
+  } catch (_) {}
+}
+
+function showNewsSuccess() {
+  clearInterval(_newsPollTimer);
+  _newsPollTimer = null;
+  document.getElementById('news-payment-view').style.display = 'none';
+  document.getElementById('news-success-view').style.display = '';
+}
+
 function resetNewsForm() {
+  clearInterval(_newsPollTimer);
+  _newsPollTimer = null;
+  _newsPollCode  = null;
   document.getElementById('news-source').value = '';
   document.getElementById('news-text').value   = '';
   document.getElementById('news-counter').textContent = '0/280';
@@ -2731,6 +2782,8 @@ function resetNewsForm() {
   submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Получить код оплаты <span class="news-form__submit-price">299 ₽</span>';
   document.getElementById('news-form-view').style.display    = 'block';
   document.getElementById('news-payment-view').style.display = 'none';
+  document.getElementById('news-success-view').style.display = 'none';
+  document.getElementById('news-check-btn').style.display    = 'none';
 }
 
 loadTickerNews();
