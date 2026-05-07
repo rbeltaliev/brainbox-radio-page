@@ -681,6 +681,110 @@
     .episode-card__play-btn:hover { gap: 10px; }
     .episode-card__play-btn svg { width: 14px; height: 14px; }
 
+    /* ─── МЕДИАТЕКА ──────────────────────────────────────────── */
+    .mediateka-promo {
+      background: var(--color-night-sky);
+      border-radius: var(--radius-card);
+      padding: 40px;
+      display: none;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .mediateka-promo.visible { display: grid; }
+    .mediateka-promo__eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--color-mint);
+      margin-bottom: 12px;
+    }
+    .mediateka-promo__title {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--color-paper-white);
+      margin-bottom: 10px;
+    }
+    .mediateka-promo__desc {
+      font-size: 14px;
+      color: rgba(249,248,246,.5);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .mediateka-promo__thumb {
+      width: 260px;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mediateka-promo__thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .episode-card__thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    /* ─── VIDEO MODAL ────────────────────────────────────────── */
+    .video-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .video-modal.open { display: flex; }
+    .video-modal__inner {
+      background: #0d1320;
+      border-radius: 16px;
+      width: min(900px, 94vw);
+      overflow: hidden;
+    }
+    .video-modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      gap: 16px;
+    }
+    .video-modal__title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .video-modal__close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.4);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      flex-shrink: 0;
+      transition: color .15s;
+    }
+    .video-modal__close:hover { color: #fff; }
+    .video-modal__frame { aspect-ratio: 16/9; }
+    .video-modal__frame iframe { width: 100%; height: 100%; border: none; display: block; }
+    @media (max-width: 768px) {
+      .mediateka-promo { grid-template-columns: 1fr; }
+      .mediateka-promo__thumb { width: 100%; }
+    }
+
     /* ─── FEATURED EPISODE ──────────────────────────────────── */
     .episode-featured {
       background: var(--color-night-sky);
@@ -2101,6 +2205,55 @@
   </div>
 </section>
 
+<!-- ─── МЕДИАТЕКА ────────────────────────────────── -->
+<section class="section" id="mediateka" style="padding-top: 0;">
+  <div class="container">
+
+    <!-- Промо-блок "Выбор редакции" -->
+    <div id="mediateka-promo" class="mediateka-promo">
+      <div>
+        <div class="mediateka-promo__eyebrow">Выбор редакции</div>
+        <h3 class="mediateka-promo__title" id="mediateka-promo-title"></h3>
+        <p class="mediateka-promo__desc" id="mediateka-promo-desc"></p>
+        <button class="btn-primary" id="mediateka-promo-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Смотреть
+        </button>
+      </div>
+      <div class="mediateka-promo__thumb" id="mediateka-promo-thumb">
+        <img id="mediateka-promo-img" src="" alt="">
+      </div>
+    </div>
+
+    <div class="section__header">
+      <h2 class="section__title">Медиатека</h2>
+    </div>
+
+    <div class="episodes-filter" id="mediateka-filter">
+      <button class="filter-btn active" data-cat="">Все</button>
+      <button class="filter-btn" data-cat="morning_show">Утреннее шоу</button>
+      <button class="filter-btn" data-cat="interview">Интервью</button>
+      <button class="filter-btn" data-cat="review">Разборы</button>
+      <button class="filter-btn" data-cat="news">Новости</button>
+    </div>
+
+    <div class="episodes-grid" id="mediateka-grid"></div>
+  </div>
+</section>
+
+<!-- ─── VIDEO MODAL ───────────────────────────────── -->
+<div class="video-modal" id="video-modal">
+  <div class="video-modal__inner">
+    <div class="video-modal__header">
+      <span class="video-modal__title" id="video-modal-title"></span>
+      <button class="video-modal__close" id="video-modal-close">✕</button>
+    </div>
+    <div class="video-modal__frame">
+      <iframe id="video-modal-iframe" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
+    </div>
+  </div>
+</div>
+
 <!-- ─── NEWS ──────────────────────────────────────── -->
 <section class="section" style="padding-top: 0;" id="news">
   <div class="container">
@@ -2818,6 +2971,128 @@ submitBtn?.addEventListener('click', async () => {
     submitBtn.textContent = 'Отправить заявку';
   }
 });
+
+/* ═══════════════════════════════════════════════════════
+   МЕДИАТЕКА
+════════════════════════════════════════════════════════ */
+
+const CAT_LABELS = { morning_show: 'Утреннее шоу', interview: 'Интервью', review: 'Разборы', news: 'Новости' };
+
+function fmtDur(sec) {
+  if (!sec) return null;
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+  return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+}
+function fmtViews(n) {
+  if (!n) return null;
+  return n >= 1000 ? (n / 1000).toFixed(1).replace('.0','') + ' тыс.' : String(n);
+}
+function fmtDateRuShort(iso) {
+  if (!iso) return null;
+  return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function openVideoModal(embedUrl, title) {
+  document.getElementById('video-modal-title').textContent = title || '';
+  document.getElementById('video-modal-iframe').src = embedUrl;
+  document.getElementById('video-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  document.getElementById('video-modal').classList.remove('open');
+  document.getElementById('video-modal-iframe').src = '';
+  document.body.style.overflow = '';
+}
+document.getElementById('video-modal-close').addEventListener('click', closeVideoModal);
+document.getElementById('video-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeVideoModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideoModal(); });
+
+function renderMediatekaGrid(items) {
+  const grid = document.getElementById('mediateka-grid');
+  if (!items.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:rgba(249,248,246,.35);font-size:14px;">Видео в этой рубрике пока нет</div>`;
+    return;
+  }
+  grid.innerHTML = items.map(v => {
+    const dur   = fmtDur(v.duration_sec);
+    const views = fmtViews(v.view_count);
+    const date  = fmtDateRuShort(v.published_at);
+    const cat   = CAT_LABELS[v.category] || v.category;
+    const esc   = s => s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const thumb = v.thumbnail_url
+      ? `<img src="${v.thumbnail_url}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="episode-card__thumb-pattern">${'<span></span>'.repeat(40)}</div><div class="episode-card__thumb-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>`;
+    return `
+      <div class="episode-card">
+        <div class="episode-card__thumb" style="cursor:pointer" onclick="openVideoModal('${esc(v.embed_url)}','${esc(v.title)}')">
+          ${thumb}
+          ${dur ? `<span class="episode-card__thumb-duration">${dur}</span>` : ''}
+        </div>
+        <div class="episode-card__body">
+          <div class="episode-card__meta">
+            <span class="episode-card__tag">${cat}</span>
+            ${date ? `<span class="episode-card__date">${date}</span>` : ''}
+          </div>
+          <div class="episode-card__title">${v.title}</div>
+          ${v.description ? `<div class="episode-card__desc">${v.description}</div>` : ''}
+          <div class="episode-card__footer">
+            <span class="episode-card__views">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              ${views || '—'}
+            </span>
+            <button class="episode-card__play-btn" onclick="openVideoModal('${esc(v.embed_url)}','${esc(v.title)}')">
+              Смотреть
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function loadMediateka(category = '') {
+  const grid = document.getElementById('mediateka-grid');
+  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:rgba(249,248,246,.35);">Загрузка…</div>`;
+  try {
+    const url  = `${API_URL}/api/videos${category ? `?category=${category}` : ''}`;
+    const data = await (await fetch(url)).json();
+    renderMediatekaGrid(data.items || []);
+  } catch {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:rgba(249,248,246,.3);font-size:14px;">Не удалось загрузить видео</div>`;
+  }
+}
+
+async function loadMediatekaPromo() {
+  try {
+    const data  = await (await fetch(`${API_URL}/api/videos/featured`)).json();
+    const { promo, video } = data;
+    if (!promo?.enabled || !video) return;
+    const block = document.getElementById('mediateka-promo');
+    document.getElementById('mediateka-promo-title').textContent = video.title;
+    const descEl = document.getElementById('mediateka-promo-desc');
+    const desc = promo.promo_description || video.description || '';
+    descEl.textContent = desc;
+    descEl.style.display = desc ? '' : 'none';
+    if (video.thumbnail_url) {
+      document.getElementById('mediateka-promo-img').src = video.thumbnail_url;
+    } else {
+      document.getElementById('mediateka-promo-thumb').style.display = 'none';
+    }
+    document.getElementById('mediateka-promo-btn').onclick = () => openVideoModal(video.embed_url, video.title);
+    block.classList.add('visible');
+  } catch {}
+}
+
+document.getElementById('mediateka-filter').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('#mediateka-filter .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadMediateka(btn.dataset.cat);
+});
+
+loadMediatekaPromo();
+loadMediateka();
 </script>
 </body>
 </html>
