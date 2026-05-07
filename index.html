@@ -2095,7 +2095,6 @@
             </div>
 
             <a id="da-link" href="https://www.donationalerts.com/r/rbelt" target="_blank"
-               onclick="startNewsPolling()"
                class="news-form__submit"
                style="display:flex;align-items:center;justify-content:center;gap:8px;
                       text-decoration:none;margin-bottom:10px">
@@ -2315,7 +2314,6 @@
           </div>
 
           <a id="pitch-da-link" href="https://www.donationalerts.com/r/rbelt" target="_blank"
-             onclick="startPitchPolling()"
              class="twin-card__btn-primary"
              style="display:flex;align-items:center;justify-content:center;gap:8px;
                     text-decoration:none;margin-bottom:10px;border:none">
@@ -2731,6 +2729,7 @@ if (newsForm) {
 
         document.getElementById('news-form-view').style.display    = 'none';
         document.getElementById('news-payment-view').style.display = 'block';
+        startNewsPolling();
       } else {
         alert('Ошибка: ' + data.error);
         btn.disabled = false; btn.textContent = 'Получить код оплаты';
@@ -3096,6 +3095,7 @@ document.getElementById('pitch-form').addEventListener('submit', async () => {
 
     document.getElementById('pitch-form-view').style.display    = 'none';
     document.getElementById('pitch-payment-view').style.display = '';
+    startPitchPolling();
   } catch (e) {
     errEl.textContent   = e.message;
     errEl.style.display = 'block';
