@@ -2297,12 +2297,28 @@
           </div>
 
           <a id="pitch-da-link" href="https://www.donationalerts.com/r/rbelt" target="_blank"
+             onclick="startPitchPolling()"
              class="twin-card__btn-primary"
              style="display:flex;align-items:center;justify-content:center;gap:8px;
                     text-decoration:none;margin-bottom:10px;border:none">
             Открыть DonationAlerts →
           </a>
-          <button onclick="pitchReset()" class="twin-card__btn-ghost" style="width:100%">← Назад</button>
+          <button id="pitch-check-btn" onclick="checkPitchPaid()" class="twin-card__btn-ghost" style="width:100%;display:none">
+            Я оплатил — проверить →
+          </button>
+          <button onclick="pitchReset()" class="twin-card__btn-ghost" style="width:100%;margin-top:4px">← Назад</button>
+        </div>
+
+        <!-- Шаг 4: успех -->
+        <div id="pitch-success-view" style="display:none;text-align:center;padding:12px 0 8px">
+          <div style="font-size:36px;margin-bottom:12px">✓</div>
+          <div style="font-size:19px;font-weight:700;color:#fff;margin-bottom:10px">Оплата принята!</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:20px">
+            Свяжемся с вами в Telegram<br>
+            <span id="pitch-success-tg" style="color:#a78bfa;font-weight:600"></span><br>
+            для подтверждения даты и времени эфира.
+          </div>
+          <button onclick="pitchReset()" class="twin-card__btn-ghost" style="width:100%">Отправить ещё заявку</button>
         </div>
       </div>
 
@@ -2924,6 +2940,36 @@ loadMediateka();
 
 let _pitchType = 'simple';
 
+let _pitchPollCode = null;
+let _pitchPollTelegram = null;
+let _pitchPollTimer = null;
+
+function startPitchPolling() {
+  if (_pitchPollTimer) return;
+  setTimeout(() => {
+    document.getElementById('pitch-check-btn').style.display = '';
+  }, 8000);
+  _pitchPollTimer = setInterval(checkPitchPaid, 6000);
+}
+
+async function checkPitchPaid() {
+  if (!_pitchPollCode) return;
+  try {
+    const res  = await fetch(`${API_URL}/api/pitch/check/${_pitchPollCode}`);
+    const data = await res.json();
+    if (data.ok && data.status === 'paid') showPitchSuccess();
+  } catch (_) {}
+}
+
+function showPitchSuccess() {
+  clearInterval(_pitchPollTimer);
+  _pitchPollTimer = null;
+  document.getElementById('pitch-payment-view').style.display = 'none';
+  document.getElementById('pitch-success-view').style.display = '';
+  const tg = _pitchPollTelegram || '';
+  document.getElementById('pitch-success-tg').textContent = tg.startsWith('@') ? tg : '@' + tg;
+}
+
 function selectPitchType(type) {
   _pitchType = type;
   document.getElementById('pitch-type-simple').className =
@@ -2933,9 +2979,14 @@ function selectPitchType(type) {
 }
 
 function pitchReset() {
-  document.getElementById('pitch-landing-view').style.display = '';
-  document.getElementById('pitch-form-view').style.display    = 'none';
-  document.getElementById('pitch-payment-view').style.display = 'none';
+  clearInterval(_pitchPollTimer);
+  _pitchPollTimer = null;
+  _pitchPollCode  = null;
+  document.getElementById('pitch-landing-view').style.display  = '';
+  document.getElementById('pitch-form-view').style.display     = 'none';
+  document.getElementById('pitch-payment-view').style.display  = 'none';
+  document.getElementById('pitch-success-view').style.display  = 'none';
+  document.getElementById('pitch-check-btn').style.display     = 'none';
   document.getElementById('pitch-form').reset();
   document.getElementById('pitch-form-error').style.display = 'none';
   selectPitchType('simple');
@@ -2980,9 +3031,14 @@ document.getElementById('pitch-form').addEventListener('submit', async () => {
 
     const { payment_code, amount } = data;
 
+    _pitchPollCode     = payment_code;
+    _pitchPollTelegram = body.telegram;
+    _pitchPollTimer    = null;
+    document.getElementById('pitch-check-btn').style.display = 'none';
+
     const amountEl = document.getElementById('pitch-amount-display');
-    amountEl.textContent    = `${amount.toLocaleString('ru-RU')} ₽`;
-    amountEl.dataset.raw    = String(amount);
+    amountEl.textContent = `${amount.toLocaleString('ru-RU')} ₽`;
+    amountEl.dataset.raw = String(amount);
     document.getElementById('pitch-code-display').textContent = payment_code;
 
     document.getElementById('pitch-form-view').style.display    = 'none';
