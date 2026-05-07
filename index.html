@@ -2998,10 +2998,9 @@ let _pitchPollTimer = null;
 
 function startPitchPolling() {
   if (_pitchPollTimer) return;
-  setTimeout(() => {
-    document.getElementById('pitch-check-btn').style.display = '';
-  }, 8000);
+  document.getElementById('pitch-check-btn').style.display = '';
   _pitchPollTimer = setInterval(checkPitchPaid, 6000);
+  console.log('[Pitch] polling started for', _pitchPollCode);
 }
 
 async function checkPitchPaid() {
@@ -3009,8 +3008,11 @@ async function checkPitchPaid() {
   try {
     const res  = await fetch(`${API_URL}/api/pitch/check/${_pitchPollCode}`);
     const data = await res.json();
+    console.log('[Pitch] poll result:', data);
     if (data.ok && data.status === 'paid') showPitchSuccess();
-  } catch (_) {}
+  } catch (e) {
+    console.warn('[Pitch] poll error:', e.message);
+  }
 }
 
 function showPitchSuccess() {
