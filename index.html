@@ -1491,8 +1491,190 @@
     }
     .songreq__textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 80px;
+      display: none;
+      animation: sq-expand .2s ease;
     }
+    .songreq__textarea.is-open {
+      display: block;
+    }
+    @keyframes sq-expand {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .songreq__msg-toggle {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      font-size: 13px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      padding: 0;
+      text-align: left;
+      transition: color .15s;
+    }
+    .songreq__msg-toggle:hover { color: rgba(255,255,255,0.65); }
+
+    /* Экран оплаты */
+    .songreq__pay-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .songreq__pay-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+    }
+    .songreq__pay-row + .songreq__pay-row {
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .songreq__pay-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 4px;
+      letter-spacing: .5px;
+    }
+    .songreq__pay-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .songreq__pay-code {
+      font-size: 22px;
+      font-weight: 800;
+      color: #4db8f0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 18px rgba(77,184,240,0.45);
+    }
+    .songreq__pay-copy {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      font-family: var(--font-body);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    .songreq__pay-copy:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .songreq__pay-hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .songreq__pay-da {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1a90d4, #0d6fa8);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+      margin-bottom: 10px;
+    }
+    .songreq__pay-da:hover { opacity: .88; transform: translateY(-1px); }
+    .songreq__pay-check {
+      width: 100%;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      font-family: var(--font-body);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: border-color .15s, color .15s;
+    }
+    .songreq__pay-check:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+    .songreq__pay-reset {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.25);
+      font-size: 12px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin: 0 auto;
+      transition: color .15s;
+    }
+    .songreq__pay-reset:hover { color: rgba(255,255,255,0.5); }
+
+    /* Success */
+    .songreq__success {
+      text-align: center;
+      padding: 24px 0 16px;
+    }
+    .songreq__success-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      animation: sq-pop .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes sq-pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .songreq__success-title {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 2vw, 30px);
+      font-weight: 400;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .songreq__success-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+    .songreq__success-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .songreq__success-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* Мобильная адаптация */
+    @media (max-width: 800px) {
+      .songreq {
+        grid-template-columns: 1fr;
+      }
+      .songreq__preview {
+        display: none;
+      }
+      .songreq__content {
+        padding: 36px 28px;
+      }
+    }
+
     .songreq__submit {
       display: inline-flex;
       align-items: center;
@@ -2201,10 +2383,12 @@
               type="url"
               placeholder="Ссылка на песню в Яндекс.Музыке"
             >
+            <button type="button" class="songreq__msg-toggle" id="songreq-msg-toggle"
+                    onclick="toggleSongMessage()">＋ Добавить сообщение (необязательно)</button>
             <textarea
               id="songreq-message"
               class="songreq__textarea"
-              placeholder="Сопроводительный текст — кому передаёшь, от кого (необязательно)"
+              placeholder="Кому передаёшь, от кого — появится на экране у зрителей"
             ></textarea>
             <button class="songreq__submit" id="songreq-submit" type="submit">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -2219,66 +2403,57 @@
 
         <!-- Шаг 2: оплата -->
         <div id="songreq-payment-view" style="display:none">
-          <h2 class="songreq__title" style="margin-bottom:8px">Оплатите через DonationAlerts</h2>
-          <p class="songreq__desc" style="margin-bottom:16px">Введите сумму и вставьте код в поле комментария</p>
+          <h2 class="songreq__title" style="margin-bottom:6px">Оплатите через DonationAlerts</h2>
+          <p class="songreq__desc" style="margin-bottom:16px;font-size:14px">Введите сумму и вставьте код в поле комментария</p>
 
-          <div style="display:flex;align-items:center;justify-content:space-between;
-                      background:#1a2535;border-radius:10px;padding:12px 16px;margin-bottom:8px">
-            <div>
-              <div style="font-size:11px;color:#64748b;margin-bottom:2px">Сумма</div>
-              <div style="font-size:20px;font-weight:700;color:#fff">99 ₽</div>
+          <div class="songreq__pay-card">
+            <div class="songreq__pay-row">
+              <div>
+                <div class="songreq__pay-label">Сумма</div>
+                <div class="songreq__pay-value">99 ₽</div>
+              </div>
+              <button class="songreq__pay-copy" onclick="copyText('99', this)">Скопировать</button>
             </div>
-            <button onclick="copyText('99', this)"
-              style="background:#0f1520;color:#94a3b8;padding:6px 12px;border-radius:6px;font-size:12px;border:1px solid #1e2d42">
-              Копировать
-            </button>
+            <div class="songreq__pay-row">
+              <div>
+                <div class="songreq__pay-label">Код — вставь в комментарий</div>
+                <div id="songreq-code-display" class="songreq__pay-code">RB-XXXXXX</div>
+              </div>
+              <button class="songreq__pay-copy" onclick="copyText(document.getElementById('songreq-code-display').textContent, this)">Скопировать</button>
+            </div>
           </div>
 
-          <div style="display:flex;align-items:center;justify-content:space-between;
-                      background:#1a2535;border-radius:10px;padding:12px 16px;margin-bottom:16px">
-            <div>
-              <div style="font-size:11px;color:#64748b;margin-bottom:2px">Код — вставь в комментарий</div>
-              <div id="songreq-code-display" style="font-size:18px;font-weight:700;color:#4db8f0">RB-XXXXXX</div>
-            </div>
-            <button onclick="copyText(document.getElementById('songreq-code-display').textContent, this)"
-              style="background:#0f1520;color:#94a3b8;padding:6px 12px;border-radius:6px;font-size:12px;border:1px solid #1e2d42">
-              Копировать
-            </button>
-          </div>
-
-          <a href="https://www.donationalerts.com/r/rbelt" target="_blank"
-             class="songreq__submit"
-             style="display:flex;align-items:center;justify-content:center;gap:8px;
-                    text-decoration:none;margin-bottom:10px">
+          <a href="https://www.donationalerts.com/r/rbelt" target="_blank" class="songreq__pay-da">
             Открыть DonationAlerts →
           </a>
 
-          <button id="songreq-check-btn" onclick="checkSongPaid()"
-            style="display:none;width:100%;background:none;border:1px solid #1e2d42;color:#64748b;
-                   font-size:13px;border-radius:10px;padding:10px;cursor:pointer;margin-bottom:8px">
+          <button id="songreq-check-btn" class="songreq__pay-check" onclick="checkSongPaid()" style="display:none">
             Я оплатил — проверить →
           </button>
 
-          <button onclick="resetSongForm()"
-            style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;
-                   text-decoration:underline;display:block;margin:0 auto">
+          <button class="songreq__pay-reset" onclick="resetSongForm()">
             Заказать другую песню
           </button>
         </div>
 
         <!-- Успех -->
-        <div id="songreq-success-view" style="display:none;text-align:center;padding:20px 0">
-          <div style="font-size:36px;margin-bottom:12px">🎵</div>
-          <h2 class="songreq__title" style="margin-bottom:10px">Песня в очереди!</h2>
-          <p class="songreq__desc" style="margin-bottom:20px">
-            Твой трек добавлен в эфир.<br>
-            Спасибо, что помогаешь формировать вкус Radio Brainbox.
-          </p>
-          <button onclick="resetSongForm()"
-            style="background:none;border:1px solid #1e2d42;color:#64748b;font-size:13px;
-                   border-radius:10px;padding:10px 20px;cursor:pointer">
-            Заказать ещё одну
-          </button>
+        <div id="songreq-success-view" style="display:none">
+          <div class="songreq__success">
+            <div class="songreq__success-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M5 13l4 4L19 7" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h2 class="songreq__success-title">Песня в очереди!</h2>
+            <p class="songreq__success-desc">
+              Твой трек добавлен в эфир.<br>
+              Спасибо, что помогаешь формировать вкус Radio Brainbox.
+            </p>
+            <button class="songreq__success-btn" onclick="resetSongForm()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+              Заказать ещё одну
+            </button>
+          </div>
         </div>
       </div>
 
@@ -3233,12 +3408,25 @@ async function checkSongPaid() {
   } catch (_) {}
 }
 
+function toggleSongMessage() {
+  const ta     = document.getElementById('songreq-message');
+  const toggle = document.getElementById('songreq-msg-toggle');
+  const open   = ta.classList.toggle('is-open');
+  toggle.textContent = open
+    ? '— Скрыть сообщение'
+    : '＋ Добавить сообщение (необязательно)';
+  if (open) ta.focus();
+}
+
 function resetSongForm() {
   clearInterval(_songPollTimer);
   _songPollTimer = null;
   _songPollCode  = null;
   document.getElementById('songreq-url').value     = '';
   document.getElementById('songreq-message').value = '';
+  const ta = document.getElementById('songreq-message');
+  ta.classList.remove('is-open');
+  document.getElementById('songreq-msg-toggle').textContent = '＋ Добавить сообщение (необязательно)';
   const btn = document.getElementById('songreq-submit');
   btn.disabled    = false;
   btn.innerHTML   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Отправить <span class="songreq__submit-price"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg> 99 ₽</span>';
