@@ -1273,6 +1273,51 @@
       align-self: flex-start;
     }
 
+    /* Левая колонка — «Музыка сообщества» */
+    .songreq__info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .songreq__info-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .songreq__info-title {
+      font-family: var(--font-heading);
+      font-size: clamp(28px, 2.8vw, 40px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: white;
+    }
+    .songreq__info-text {
+      font-size: 14px;
+      color: rgba(249,248,246,0.5);
+      line-height: 1.7;
+    }
+    .songreq__info-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .songreq__info-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: rgba(249,248,246,0.6);
+      line-height: 1.5;
+    }
+    .songreq__info-step-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
     /* Карточка виджета */
     .sr-card {
       width: 100%;
@@ -2322,57 +2367,42 @@
   <div class="container">
     <div class="songreq">
 
-      <!-- Левая колонка: превью OBS-виджета -->
+      <!-- Левая колонка: Музыка сообщества -->
       <div class="songreq__preview">
-        <div class="songreq__preview-label">Так выглядит в эфире</div>
-        <div class="sr-card">
-          <div class="sr-card__header">
-            <div class="sr-card__header-icon">🎵</div>
-            <div class="sr-card__header-title">Песня по заявке</div>
-            <div class="sr-card__header-price">💸 99 ₽</div>
-          </div>
-          <div class="sr-card__track">
-            <div class="sr-card__cover">🎵</div>
-            <div class="sr-card__track-info">
-              <div class="sr-card__source">🎧 Яндекс.Музыка</div>
-              <div class="sr-card__artist">Coldplay</div>
-              <div class="sr-card__title">Sky Full of Stars</div>
+        <div class="songreq__info">
+          <div class="songreq__info-eyebrow">🧠 Как работает эфир</div>
+          <h2 class="songreq__info-title">Музыка<br>сообщества</h2>
+          <p class="songreq__info-text">
+            Эфир Radio Brainbox строится на ваших предпочтениях. Это наш совместный
+            проект с Яндекс.Музыкой — эфир формируется автоматически нейросетью на
+            основе интересов слушателей. Вы можете поставить свою песню в эфир, и это
+            событие определит будущие выборы нейросети. Вы можете лайкнуть трек —
+            и он будет звучать чаще.
+          </p>
+          <div class="songreq__info-steps">
+            <div class="songreq__info-step">
+              <span class="songreq__info-step-icon">🎵</span>
+              <span>Слушатель находит трек в каталоге Яндекс.Музыки</span>
             </div>
-            <div class="sr-card__eq">
-              <div class="sr-card__eq-bar"></div>
-              <div class="sr-card__eq-bar"></div>
-              <div class="sr-card__eq-bar"></div>
-              <div class="sr-card__eq-bar"></div>
-              <div class="sr-card__eq-bar"></div>
-              <div class="sr-card__eq-bar"></div>
+            <div class="songreq__info-step">
+              <span class="songreq__info-step-icon">📡</span>
+              <span>Трек попадает в очередь и звучит в эфире</span>
             </div>
-          </div>
-          <div class="sr-card__divider"></div>
-          <div class="sr-card__from">
-            <div class="sr-card__avatar">👤</div>
-            <div>
-              <div class="sr-card__from-label">Заказал</div>
-              <div class="sr-card__from-name">Алексей Ковалёв</div>
-              <div class="sr-card__message">«Для всей команды Brainbox! Вы делаете крутое дело!»</div>
+            <div class="songreq__info-step">
+              <span class="songreq__info-step-icon">🧠</span>
+              <span>Заявка формирует датасет, что определяет эфир как «Музыка сообщества Brainbox»</span>
             </div>
-          </div>
-          <div class="sr-card__footer">
-            <div class="sr-card__footer-brand">
-              <div class="sr-card__footer-dot"></div>
-              brainbox.VC Radio
-            </div>
-            <div class="sr-card__queue">В очереди: <strong>2 трека</strong></div>
           </div>
         </div>
       </div>
 
       <!-- Правая колонка: описание + форма -->
       <div class="songreq__content">
-        <div class="songreq__badge">🎵 Интерактив</div>
-        <h2 class="songreq__title">Закажи песню<br>в прямом эфире</h2>
+        <div class="songreq__badge">💸 Донат · 99 ₽</div>
+        <h2 class="songreq__title">Добавить трек<br>в эфир</h2>
         <p class="songreq__desc">
-          Отправь ссылку на трек из Яндекс.Музыки — и мы поставим его в эфир.
-          Твоё имя и сообщение появятся на экране у всех зрителей.
+          Найди песню в Яндекс.Музыке, вставь ссылку — и она прозвучит в эфире.
+          Каждая заявка обучает датасет. Донаты поддерживают работу радио.
         </p>
         <!-- Шаг 1: форма -->
         <div id="songreq-form-view">
@@ -2392,11 +2422,8 @@
             ></textarea>
             <button class="songreq__submit" id="songreq-submit" type="submit">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-              Отправить
-              <span class="songreq__submit-price">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-                99 ₽
-              </span>
+              Отправить донат
+              <span class="songreq__submit-price">99 ₽</span>
             </button>
           </form>
         </div>
@@ -2444,14 +2471,14 @@
                 <path d="M5 13l4 4L19 7" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <h2 class="songreq__success-title">Песня в очереди!</h2>
+            <h2 class="songreq__success-title">Спасибо за донат!</h2>
             <p class="songreq__success-desc">
-              Твой трек добавлен в эфир.<br>
-              Спасибо, что помогаешь формировать вкус Radio Brainbox.
+              Твой трек в очереди. Заявка добавлена в датасет —<br>
+              ты формируешь музыкальный вкус сообщества.
             </p>
             <button class="songreq__success-btn" onclick="resetSongForm()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
-              Заказать ещё одну
+              Добавить ещё трек
             </button>
           </div>
         </div>
@@ -3429,7 +3456,7 @@ function resetSongForm() {
   document.getElementById('songreq-msg-toggle').textContent = '＋ Добавить сообщение (необязательно)';
   const btn = document.getElementById('songreq-submit');
   btn.disabled    = false;
-  btn.innerHTML   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Отправить <span class="songreq__submit-price"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg> 99 ₽</span>';
+  btn.innerHTML   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Отправить донат <span class="songreq__submit-price">99 ₽</span>';
   document.getElementById('songreq-form-view').style.display    = 'block';
   document.getElementById('songreq-payment-view').style.display = 'none';
   document.getElementById('songreq-success-view').style.display = 'none';
