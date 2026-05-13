@@ -2457,7 +2457,7 @@
             <div style="font-size:11px;color:#64748b;margin-top:8px">Сканируй QR или открой ссылку</div>
           </div>
 
-          <a id="songreq-tbank-link" href="TBANK_PLACEHOLDER" target="_blank" class="songreq__pay-da">
+          <a id="songreq-tbank-link" href="https://www.tbank.ru/cf/1CF40QJw21v" target="_blank" class="songreq__pay-da">
             Открыть Т-Банк Сбор →
           </a>
 
@@ -2590,7 +2590,7 @@
               <div style="font-size:11px;color:#64748b;margin-top:8px">Сканируй QR или открой ссылку</div>
             </div>
 
-            <a id="news-tbank-link" href="TBANK_PLACEHOLDER" target="_blank"
+            <a id="news-tbank-link" href="https://www.tbank.ru/cf/1CF40QJw21v" target="_blank"
                class="news-form__submit"
                style="display:flex;align-items:center;justify-content:center;gap:8px;
                       text-decoration:none;margin-bottom:10px">
@@ -2718,7 +2718,7 @@
             <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:8px">Сканируй QR или открой ссылку</div>
           </div>
 
-          <a id="pitch-tbank-link" href="TBANK_PLACEHOLDER" target="_blank"
+          <a id="pitch-tbank-link" href="https://www.tbank.ru/cf/1CF40QJw21v" target="_blank"
              class="twin-card__btn-primary"
              style="display:flex;align-items:center;justify-content:center;gap:8px;
                     text-decoration:none;margin-bottom:10px;border:none">
@@ -2798,7 +2798,7 @@
 
 <script>
   /* ── Т-Банк Сбор ── */
-  const TBANK_URL = 'TBANK_PLACEHOLDER'; // ← вставить ссылку на Сбор
+  const TBANK_URL = 'https://www.tbank.ru/cf/1CF40QJw21v'; // ← вставить ссылку на Сбор
 
   function initQR(containerId, url) {
     const el = document.getElementById(containerId);
@@ -2810,7 +2810,7 @@
   function applyTbankLinks() {
     ['songreq-tbank-link','news-tbank-link','pitch-tbank-link'].forEach(id => {
       const a = document.getElementById(id);
-      if (a && TBANK_URL !== 'TBANK_PLACEHOLDER') a.href = TBANK_URL;
+      if (a && TBANK_URL !== 'https://www.tbank.ru/cf/1CF40QJw21v') a.href = TBANK_URL;
     });
   }
 
@@ -3153,7 +3153,7 @@ if (newsForm) {
 
         document.getElementById('news-form-view').style.display    = 'none';
         document.getElementById('news-payment-view').style.display = 'block';
-        if (TBANK_URL !== 'TBANK_PLACEHOLDER') {
+        if (TBANK_URL !== 'https://www.tbank.ru/cf/1CF40QJw21v') {
           const nl = document.getElementById('news-tbank-link'); if (nl) nl.href = TBANK_URL;
           setTimeout(() => initQR('news-qr', TBANK_URL), 50);
         }
@@ -3525,7 +3525,7 @@ document.getElementById('pitch-form').addEventListener('submit', async () => {
 
     document.getElementById('pitch-form-view').style.display    = 'none';
     document.getElementById('pitch-payment-view').style.display = '';
-    if (TBANK_URL !== 'TBANK_PLACEHOLDER') {
+    if (TBANK_URL !== 'https://www.tbank.ru/cf/1CF40QJw21v') {
       const pl = document.getElementById('pitch-tbank-link'); if (pl) pl.href = TBANK_URL;
       setTimeout(() => initQR('pitch-qr', TBANK_URL), 50);
     }
@@ -3565,7 +3565,7 @@ document.getElementById('songreq-form').addEventListener('submit', async () => {
       document.getElementById('songreq-code-display').textContent = data.payment_code;
       document.getElementById('songreq-form-view').style.display    = 'none';
       document.getElementById('songreq-payment-view').style.display = 'block';
-      if (TBANK_URL !== 'TBANK_PLACEHOLDER') {
+      if (TBANK_URL !== 'https://www.tbank.ru/cf/1CF40QJw21v') {
         const sl = document.getElementById('songreq-tbank-link'); if (sl) sl.href = TBANK_URL;
         setTimeout(() => initQR('songreq-qr', TBANK_URL), 50);
       }
