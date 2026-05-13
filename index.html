@@ -83,54 +83,127 @@
       padding: 80px 0;
     }
     .albert-quote__inner {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 40px;
-      align-items: start;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
     }
-    .albert-quote__avatar {
-      width: 80px;
-      height: 80px;
+    .albert-quote__avatar-wrap {
+      flex-shrink: 0;
+      width: 88px;
+      position: relative;
+      top: 4px;
+    }
+    .albert-quote__photo {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 16px rgba(13,31,92,.18);
+    }
+    .albert-quote__photo-fallback {
+      width: 88px;
+      height: 88px;
       border-radius: 50%;
       background: #0d1f5c;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 16px rgba(13,31,92,.18);
+    }
+    /* Speech bubble */
+    .albert-quote__bubble {
+      position: relative;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 8px 32px rgba(13,31,92,.10);
+      flex: 1;
+      min-width: 0;
+    }
+    .albert-quote__bubble::before {
+      content: '';
+      position: absolute;
+      left: -14px;
+      top: 28px;
+      border: 8px solid transparent;
+      border-right-color: #fff;
+      filter: drop-shadow(-2px 0 2px rgba(13,31,92,.06));
+    }
+    .albert-quote__close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-elephant-bone);
+      color: var(--color-muted);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s, color .15s;
       flex-shrink: 0;
-      font-family: var(--font-body);
+    }
+    .albert-quote__close:hover {
+      background: #e0ddd6;
+      color: var(--color-night-sky);
     }
     .albert-quote__eyebrow {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: .08em;
       text-transform: uppercase;
       color: var(--color-mint);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .albert-quote__text {
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.8;
       color: var(--color-wetty-asphalt);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      padding-right: 20px;
     }
-    .albert-quote__text p + p {
-      margin-top: 14px;
-    }
+    .albert-quote__text p + p { margin-top: 12px; }
     .albert-quote__signature {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--color-night-sky);
-      font-weight: 500;
+      font-weight: 600;
       line-height: 1.6;
-      padding-top: 16px;
+      padding-top: 14px;
       border-top: 1px solid var(--color-elephant-bone);
     }
     .albert-quote__signature span {
       color: var(--color-muted);
       font-weight: 400;
     }
+    /* Collapsed state */
+    .albert-quote__collapsed {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--color-muted);
+    }
+    .albert-quote__collapsed-name {
+      font-weight: 600;
+      color: var(--color-night-sky);
+    }
+    .albert-quote__read-btn {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--color-mint);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .albert-quote__read-btn:hover { text-decoration: underline; }
 
     /* ─── DONATE BANNER ─────────────────────────────────────── */
     .donate-banner {
@@ -1992,8 +2065,12 @@
 
       /* Слово от Альберта */
       .albert-quote { padding: 48px 0; }
-      .albert-quote__inner { grid-template-columns: 1fr; gap: 20px; }
-      .albert-quote__avatar { width: 56px; height: 56px; font-size: 22px; }
+      .albert-quote__inner { gap: 12px; }
+      .albert-quote__avatar-wrap { width: 60px; }
+      .albert-quote__photo,
+      .albert-quote__photo-fallback { width: 60px; height: 60px; }
+      .albert-quote__bubble { padding: 20px; }
+      .albert-quote__text { font-size: 14px; padding-right: 0; }
 
       /* Donate banner */
       .donate-banner { padding: 48px 0; }
@@ -2272,21 +2349,48 @@
 <section class="albert-quote" id="about">
   <div class="container">
     <div class="albert-quote__inner">
-      <div class="albert-quote__avatar">А</div>
-      <div class="albert-quote__content">
-        <div class="albert-quote__eyebrow">Слово от Альберта</div>
-        <div class="albert-quote__text">
-          <p>Когда-то радио было главным способом узнавать новое. Люди включали приёмник утром и слышали голоса, которые рассказывали о событиях, идеях и людях, меняющих мир. И мы живём во время перемен. Время, когда быть IT-предпринимателем перестаёт быть вызовом для отчаянных, а становится нормой.</p>
-          <p>Мне захотелось создать такое радио, где люди узнавали бы о том, что быть IT-предпринимателем в России — это интересно, не страшно и выгодно.</p>
-          <p>Вы на Radio Brainbox. Здесь мы круглосуточно говорим о технологиях, стартапах, инвестициях и иногда об Обществе изобилия. Здесь звучит музыка, выходят интервью с предпринимателями, утренние эфиры, разборы проектов и разговоры о том, как интеллект постепенно становится главным источником богатства.</p>
-          <p>Пока мы только начинаем. Я самостоятельно навайбкодил этот сервис. Но есть и команда добровольцев, которые помогают мне с организацией эфира. Если вам нравится проект, оставайтесь с нами.</p>
-          <p>И добро пожаловать в эфир. Нам нужны живые репортажи с венчурных мероприятий, обучающие рубрики, прямые эфиры и интервью. Это открытая площадка для IT-предпринимателей. Присоединяйтесь.</p>
+
+      <!-- Аватарка -->
+      <div class="albert-quote__avatar-wrap">
+        <img
+          class="albert-quote__photo"
+          src="img/albert.jpg"
+          alt="Альберт Алиев"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+        >
+        <div class="albert-quote__photo-fallback" style="display:none">А</div>
+      </div>
+
+      <!-- Бабл -->
+      <div class="albert-quote__bubble" id="albert-bubble">
+        <button class="albert-quote__close" id="albert-close-btn" onclick="toggleAlbertQuote()" title="Свернуть">✕</button>
+
+        <!-- Полный текст -->
+        <div id="albert-full">
+          <div class="albert-quote__eyebrow">Слово от Альберта</div>
+          <div class="albert-quote__text">
+            <p>Когда-то радио было главным способом узнавать новое. Люди включали приёмник утром и слышали голоса, которые рассказывали о событиях, идеях и людях, меняющих мир. И мы живём во время перемен. Время, когда быть IT-предпринимателем перестаёт быть вызовом для отчаянных, а становится нормой.</p>
+            <p>Мне захотелось создать такое радио, где люди узнавали бы о том, что быть IT-предпринимателем в России — это интересно, не страшно и выгодно.</p>
+            <p>Вы на Radio Brainbox. Здесь мы круглосуточно говорим о технологиях, стартапах, инвестициях и иногда об Обществе изобилия. Здесь звучит музыка, выходят интервью с предпринимателями, утренние эфиры, разборы проектов и разговоры о том, как интеллект постепенно становится главным источником богатства.</p>
+            <p>Пока мы только начинаем. Я самостоятельно навайбкодил этот сервис. Но есть и команда добровольцев, которые помогают мне с организацией эфира. Если вам нравится проект, оставайтесь с нами.</p>
+            <p>И добро пожаловать в эфир. Нам нужны живые репортажи с венчурных мероприятий, обучающие рубрики, прямые эфиры и интервью. Это открытая площадка для IT-предпринимателей. Присоединяйтесь.</p>
+          </div>
+          <div class="albert-quote__signature">
+            Альберт Алиев<br>
+            <span>CEO brainbox.VC</span>
+          </div>
         </div>
-        <div class="albert-quote__signature">
-          Альберт Алиев<br>
+
+        <!-- Свёрнутое состояние -->
+        <div id="albert-collapsed" class="albert-quote__collapsed">
+          <span class="albert-quote__collapsed-name">Альберт Алиев</span>
+          <span>·</span>
           <span>CEO brainbox.VC</span>
+          <span>…</span>
+          <button class="albert-quote__read-btn" onclick="toggleAlbertQuote()">Читать →</button>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -2797,6 +2901,25 @@
 </footer>
 
 <script>
+  /* ── Слово от Альберта — toggle ── */
+  function toggleAlbertQuote() {
+    const full      = document.getElementById('albert-full');
+    const collapsed = document.getElementById('albert-collapsed');
+    const btn       = document.getElementById('albert-close-btn');
+    const isOpen    = full.style.display !== 'none';
+    if (isOpen) {
+      full.style.display      = 'none';
+      collapsed.style.display = 'flex';
+      btn.textContent         = '＋';
+      btn.title               = 'Развернуть';
+    } else {
+      full.style.display      = '';
+      collapsed.style.display = 'none';
+      btn.textContent         = '✕';
+      btn.title               = 'Свернуть';
+    }
+  }
+
   /* ── Т-Банк Сбор ── */
   const TBANK_URL = 'https://www.tbank.ru/cf/1CF40QJw21v'; // ← вставить ссылку на Сбор
 
